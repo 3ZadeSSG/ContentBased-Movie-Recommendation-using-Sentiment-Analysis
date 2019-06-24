@@ -60,6 +60,11 @@ public class MainActivity extends AppCompatActivity
             FirebaseUser user=firebaseAuth.getCurrentUser();
             userEmailDisplay.setText(user.getEmail());
         }
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new ExploreFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_explore);
+        }
     }
 
     @Override
@@ -135,13 +140,21 @@ public class MainActivity extends AppCompatActivity
                     .setNegativeButton("No", null).show();
         } else if (id == R.id.nav_sentiment_prediction) {
             //launch sentiment search fragment
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new SentimentPredictionFragment()).commit();
         } else if (id == R.id.nav_movie_rating_search) {
             //launch movie rating search fragment
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new MovieRatingSearchFragment()).commit();
         } else if (id == R.id.nav_twitter_analyzer) {
             //launch twitter analyzer fragment
+        } else if(id==R.id.nav_explore){
+
+            //launch explore fragment
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new ExploreFragment()).commit();
         }
+
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

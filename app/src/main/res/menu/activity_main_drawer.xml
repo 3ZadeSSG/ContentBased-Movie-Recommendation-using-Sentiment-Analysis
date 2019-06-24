@@ -6,7 +6,7 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_sentiment_prediction"
-            android:icon="@mipmap/ic_sentiment"
+            android:icon="@drawable/ic_sentiment"
             android:title="Predict Sentiment"/>
         <item
             android:id="@+id/nav_movie_rating_search"
@@ -14,7 +14,7 @@
             android:title="Search Movie Rating" />
         <item
             android:id="@+id/nav_twitter_analyzer"
-            android:icon="@mipmap/ic_twitter"
+            android:icon="@drawable/ic_twitter"
             android:title="Analyzer Twitter Sentiment" />
         <item
             android:id="@+id/nav_explore"
