@@ -66,6 +66,11 @@ public class MovieRatingSearchFragment extends Fragment implements   View.OnClic
         buttonMovieSearch.setOnClickListener(this);
         return view;
     }
+    public void onResume(){
+        super.onResume();
+        ((MainActivity) getActivity())
+                .setActionBarTitle("Search Movie Rating");
+    }
 
     public void showAlertDialog(String TITLE, String MESSAGE) {
         new AlertDialog.Builder(getActivity())

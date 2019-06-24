@@ -2,15 +2,51 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
     android:gravity="center"
-
     >
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textSize="24dp"
-    android:gravity="center"
-    android:layout_margin="16dp"
-    android:textColor="@color/PrimaryPurple"
-    android:text="Currently no content on explore page to show"
-    />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:orientation="vertical"
+        android:id="@+id/linearLayoutExploreFragment"
+        >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="Hello World!" />
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:orientation="vertical"
+        android:id="@+id/listViewMovies"
+        >
+    </ListView>
+    </LinearLayout>
+    <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/spin_kit"
+        style="@style/SpinKitView.Large.Circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        android:elevation="16dp"
+        android:outlineAmbientShadowColor="@color/Black"
+        android:outlineSpotShadowColor="@color/Black"
+        app:SpinKit_Color="@color/PrimaryPurple"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24dp"
+        android:gravity="center"
+        android:id="@+id/textViewExploreStatusWarning"
+        android:layout_margin="16dp"
+        android:textColor="@color/PrimaryPurple"
+        android:text="Loading! Please wait..."
+        />
 </RelativeLayout>

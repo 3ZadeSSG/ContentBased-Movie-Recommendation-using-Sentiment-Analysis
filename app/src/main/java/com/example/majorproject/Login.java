@@ -46,7 +46,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             startActivity(mainActivity);
         }
     }
-
     public void userLogin(){
         String email=editTextEmail.getText().toString();
         String password=editTextPassword.getText().toString();

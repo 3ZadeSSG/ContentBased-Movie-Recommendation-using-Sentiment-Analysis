@@ -50,6 +50,12 @@ public class SentimentPredictionFragment extends Fragment implements   View.OnCl
         buttonSumbitQueryText.setOnClickListener(this);
         return view;
     }
+    public void onResume(){
+        super.onResume();
+        ((MainActivity) getActivity())
+                .setActionBarTitle("Sentiment Prediction");
+    }
+
     @Override
     public void onClick(View view) {
         if(view==buttonSumbitQueryText){

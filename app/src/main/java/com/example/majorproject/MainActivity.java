@@ -23,13 +23,15 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.view.Menu;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, FragmentManager.OnBackStackChangedListener {
     TextView userEmailDisplay;
     FirebaseAuth firebaseAuth;
     @Override
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity
                     new ExploreFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_explore);
         }
+        getSupportFragmentManager().addOnBackStackChangedListener(this);
     }
 
     @Override
@@ -158,5 +161,18 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        try {
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+            fragment.onResume();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    public void setActionBarTitle(String title) {
+        getSupportActionBar().setTitle(title);
     }
 }
