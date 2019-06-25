@@ -12,7 +12,9 @@
         android:roundIcon="@mipmap/ic_logo_university"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ExploreMovieDetails"></activity>
+        <activity android:name=".ExploreMovieDetails"
+            android:label="Details"
+            android:parentActivityName=".MainActivity"></activity>
         <activity
             android:name=".SentimentPrediction"
             android:label="@string/sentiment_activity_result"
@@ -40,5 +42,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

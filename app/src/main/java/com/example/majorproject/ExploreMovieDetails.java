@@ -45,11 +45,11 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
         Bitmap moviePoster = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
 
         imageViewPoster.setImageBitmap(moviePoster);
-        textViewOverview.setText(extras.getString("string_overview"));
+        textViewOverview.setText("Overview"+"\n"+extras.getString("string_overview"));
         movieName=extras.getString("movieTitle");
-        textViewTitle.setText(movieName);
-        textViewOriginalTitle.setText(extras.getString("movieOriginalTitle"));
-        textViewReleaseDate.setText(extras.getString("movieReleaseDate"));
+        textViewTitle.setText("Title: "+movieName);
+        textViewOriginalTitle.setText("Original Title: "+extras.getString("movieOriginalTitle"));
+        textViewReleaseDate.setText("Release Date: "+extras.getString("movieReleaseDate"));
 
         buttonLaunchGoogle.setOnClickListener(this);
         buttonLike.setOnClickListener(this);
