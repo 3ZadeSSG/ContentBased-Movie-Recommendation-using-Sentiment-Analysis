@@ -1,7 +1,5 @@
 package com.example.majorproject;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -25,31 +25,32 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
     ImageView imageViewPoster;
     String movieName;
     Button buttonLaunchGoogle;
-    Button buttonLike,buttonDislike;
+    Button buttonLike, buttonDislike;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore_movie_details);
 
-        textViewTitle=findViewById(R.id.textViewMovieTitle);
-        textViewOriginalTitle=findViewById(R.id.textViewMovieOriginalTitle);
-        textViewReleaseDate=findViewById(R.id.textViewReleaseDate);
-        textViewOverview=findViewById(R.id.textViewOverview);
-        imageViewPoster=findViewById(R.id.imageViewPoster);
-        buttonLaunchGoogle=findViewById(R.id.buttonLaunchInternet);
-        buttonLike=findViewById(R.id.buttonLike);
-        buttonDislike=findViewById(R.id.buttonDislike);
+        textViewTitle = findViewById(R.id.textViewMovieTitle);
+        textViewOriginalTitle = findViewById(R.id.textViewMovieOriginalTitle);
+        textViewReleaseDate = findViewById(R.id.textViewReleaseDate);
+        textViewOverview = findViewById(R.id.textViewOverview);
+        imageViewPoster = findViewById(R.id.imageViewPoster);
+        buttonLaunchGoogle = findViewById(R.id.buttonLaunchInternet);
+        buttonLike = findViewById(R.id.buttonLike);
+        buttonDislike = findViewById(R.id.buttonDislike);
 
         Bundle extras = getIntent().getExtras();
         byte[] byteArray = extras.getByteArray("moviePoster");
         Bitmap moviePoster = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
 
         imageViewPoster.setImageBitmap(moviePoster);
-        textViewOverview.setText("Overview"+"\n"+extras.getString("string_overview"));
-        movieName=extras.getString("movieTitle");
-        textViewTitle.setText("Title: "+movieName);
-        textViewOriginalTitle.setText("Original Title: "+extras.getString("movieOriginalTitle"));
-        textViewReleaseDate.setText("Release Date: "+extras.getString("movieReleaseDate"));
+        textViewOverview.setText("Overview" + "\n" + extras.getString("string_overview"));
+        movieName = extras.getString("movieTitle");
+        textViewTitle.setText("Title: " + movieName);
+        textViewOriginalTitle.setText("Original Title: " + extras.getString("movieOriginalTitle"));
+        textViewReleaseDate.setText("Release Date: " + extras.getString("movieReleaseDate"));
 
         buttonLaunchGoogle.setOnClickListener(this);
         buttonLike.setOnClickListener(this);
@@ -58,7 +59,7 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View view) {
-        if(view==buttonLaunchGoogle){
+        if (view == buttonLaunchGoogle) {
             String escapedQuery = null;
             try {
                 escapedQuery = URLEncoder.encode(movieName, "UTF-8");
@@ -69,11 +70,11 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
         }
-        if(view==buttonLike){
+        if (view == buttonLike) {
             Toast.makeText(ExploreMovieDetails.this, "You liked this movie",
                     Toast.LENGTH_LONG).show();
         }
-        if(view==buttonDislike){
+        if (view == buttonDislike) {
             Toast.makeText(ExploreMovieDetails.this, "You disliked this movie",
                     Toast.LENGTH_LONG).show();
         }

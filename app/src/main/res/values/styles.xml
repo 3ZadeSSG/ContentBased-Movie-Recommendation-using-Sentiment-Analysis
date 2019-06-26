@@ -29,7 +29,6 @@
 
     <style name="textBoxStyle">
         <item name="android:elevation">8dp</item>
-        <item name="android:textSize">24sp</item>
         <item name="android:textColor">@color/Black</item>
         <item name="android:background">@drawable/my_textbox_layout</item>
         <item name="android:shadowColor">@color/Black</item>

@@ -1,7 +1,5 @@
 package com.example.majorproject;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -10,6 +8,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -23,6 +23,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
     CircleDisplay cd;
     String movieTitle;
     float score;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,26 +32,27 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
         Bundle extras = getIntent().getExtras();
         byte[] byteArray = extras.getByteArray("moviePoster");
         moviePoster = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-        posterImageView=(ImageView)findViewById(R.id.image_view);
+        posterImageView = findViewById(R.id.image_view);
         posterImageView.setImageBitmap(moviePoster);
-        movieRating=findViewById(R.id.textViewMovieRating);
+        movieRating = findViewById(R.id.textViewMovieRating);
 
-        String tempRating=extras.getString("movieRating");
-        movieRating.setText("Rating: "+tempRating);
-        movieTitleTextView=findViewById(R.id.movieTitleTextView);
-        movieTitle=extras.getString("movieTitle");
+        String tempRating = extras.getString("movieRating");
+        movieRating.setText("Rating: " + tempRating);
+        movieTitleTextView = findViewById(R.id.movieTitleTextView);
+        movieTitle = extras.getString("movieTitle");
         movieTitleTextView.setText(movieTitle);
-        cd = (CircleDisplay) findViewById(R.id.circleDisplay);
+        cd = findViewById(R.id.circleDisplay);
         score = Float.parseFloat((tempRating.split("/"))[0]);
         showCircle();
         posterImageView.setOnClickListener(this);
         movieTitleTextView.setOnClickListener(this);
     }
-    void showCircle(){
+
+    void showCircle() {
         cd.setAnimDuration(3000);
         cd.setValueWidthPercent(55f);
         cd.setTextSize(16f);
-        score=score*10;
+        score = score * 10;
         cd.setColor(getResources().getColor(R.color.PrimaryPurple));
         cd.setDrawText(true);
         cd.setDrawInnerCircle(true);
@@ -63,14 +65,15 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View view) {
-        if(view==posterImageView){
+        if (view == posterImageView) {
             callGooogle();
         }
-        if(view==movieTitleTextView){
+        if (view == movieTitleTextView) {
             callGooogle();
         }
     }
-    public void callGooogle(){
+
+    public void callGooogle() {
         String escapedQuery = null;
         try {
             escapedQuery = URLEncoder.encode(movieTitle, "UTF-8");

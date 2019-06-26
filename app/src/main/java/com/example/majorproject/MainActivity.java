@@ -4,36 +4,27 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
-import android.view.View;
-
-import androidx.core.view.GravityCompat;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-
-import android.view.Menu;
-import android.widget.TextView;
-import android.widget.Toast;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, FragmentManager.OnBackStackChangedListener {
     TextView userEmailDisplay;
     FirebaseAuth firebaseAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,22 +41,21 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         View headerView = navigationView.getHeaderView(0);
-        userEmailDisplay=headerView.findViewById(R.id.textViewUserEmailDisplay);
+        userEmailDisplay = headerView.findViewById(R.id.textViewUserEmailDisplay);
 
-        firebaseAuth=FirebaseAuth.getInstance();
-        if(firebaseAuth.getCurrentUser()==null){
+        firebaseAuth = FirebaseAuth.getInstance();
+        if (firebaseAuth.getCurrentUser() == null) {
             finish();
             Intent signupActivity = new Intent(MainActivity.this, Signup.class);
             startActivity(signupActivity);
-        }
-        else{
-            FirebaseUser user=firebaseAuth.getCurrentUser();
+        } else {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
             userEmailDisplay.setText(user.getEmail());
         }
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                    new ExploreFragment()).commit();
-            navigationView.setCheckedItem(R.id.nav_explore);
+                    new MovieRatingSearchFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_movie_rating_search);
         }
         getSupportFragmentManager().addOnBackStackChangedListener(this);
     }
@@ -79,14 +69,15 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
-/*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-    */
+
+    /*
+        @Override
+        public boolean onCreateOptionsMenu(Menu menu) {
+            // Inflate the menu; this adds items to the action bar if it is present.
+            getMenuInflater().inflate(R.menu.main, menu);
+            return true;
+        }
+        */
 /*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -122,7 +113,8 @@ public class MainActivity extends AppCompatActivity
                             intent.addCategory(Intent.CATEGORY_HOME);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
-                        }})
+                        }
+                    })
                     .setNegativeButton("No", null).show();
 
         } else if (id == R.id.nav_logout) {
@@ -139,7 +131,8 @@ public class MainActivity extends AppCompatActivity
                             finish();
                             Intent signupScreen = new Intent(MainActivity.this, Signup.class);
                             startActivity(signupScreen);
-                        }})
+                        }
+                    })
                     .setNegativeButton("No", null).show();
         } else if (id == R.id.nav_sentiment_prediction) {
             //launch sentiment search fragment
@@ -151,7 +144,7 @@ public class MainActivity extends AppCompatActivity
                     new MovieRatingSearchFragment()).commit();
         } else if (id == R.id.nav_twitter_analyzer) {
             //launch twitter analyzer fragment
-        } else if(id==R.id.nav_explore){
+        } else if (id == R.id.nav_explore) {
 
             //launch explore fragment
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
@@ -172,6 +165,7 @@ public class MainActivity extends AppCompatActivity
             ex.printStackTrace();
         }
     }
+
     public void setActionBarTitle(String title) {
         getSupportActionBar().setTitle(title);
     }

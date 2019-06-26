@@ -29,7 +29,7 @@ import java.nio.charset.Charset;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class SentimentPredictionFragment extends Fragment implements   View.OnClickListener  {
+public class SentimentPredictionFragment extends Fragment implements View.OnClickListener {
     String address;
     EditText inputBox;
     ProgressBar progressBar;
@@ -46,11 +46,12 @@ public class SentimentPredictionFragment extends Fragment implements   View.OnCl
         details = view.findViewById(R.id.details);
         DoubleBounce myProgressBar = new DoubleBounce();
         progressBar.setIndeterminateDrawable(myProgressBar);
-        buttonSumbitQueryText=view.findViewById(R.id.buttonSentimentQuery);
+        buttonSumbitQueryText = view.findViewById(R.id.buttonSentimentQuery);
         buttonSumbitQueryText.setOnClickListener(this);
         return view;
     }
-    public void onResume(){
+
+    public void onResume() {
         super.onResume();
         ((MainActivity) getActivity())
                 .setActionBarTitle("Sentiment Prediction");
@@ -58,8 +59,8 @@ public class SentimentPredictionFragment extends Fragment implements   View.OnCl
 
     @Override
     public void onClick(View view) {
-        if(view==buttonSumbitQueryText){
-            String input[] = inputBox.getText().toString().split(" ");
+        if (view == buttonSumbitQueryText) {
+            String[] input = inputBox.getText().toString().split(" ");
             String review = "";
             for (int i = 0; i < input.length - 1; i++) {
                 review += input[i] + "+";
@@ -72,13 +73,14 @@ public class SentimentPredictionFragment extends Fragment implements   View.OnCl
             task.execute(url);
         }
     }
+
     public boolean isNetworkAvailable() {
         try {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
-            return (mNetworkInfo == null) ? false : true;
+            return mNetworkInfo != null;
 
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             return false;
 
         }
@@ -99,7 +101,8 @@ public class SentimentPredictionFragment extends Fragment implements   View.OnCl
             details.setVisibility(View.VISIBLE);
         }
     }
-    public void showAlertDialog(String TITLE,String MESSAGE){
+
+    public void showAlertDialog(String TITLE, String MESSAGE) {
         new AlertDialog.Builder(getActivity())
                 .setTitle(TITLE)
                 .setMessage(MESSAGE)
@@ -107,6 +110,7 @@ public class SentimentPredictionFragment extends Fragment implements   View.OnCl
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
+
     public class SentimentAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {

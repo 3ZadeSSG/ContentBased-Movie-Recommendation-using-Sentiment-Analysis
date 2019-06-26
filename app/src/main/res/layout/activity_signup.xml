@@ -6,34 +6,51 @@
     android:layout_height="match_parent"
     android:gravity="center"
     tools:context=".Signup">
+
+    <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/spin_kit"
+        style="@style/SpinKitView.Large.Circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        android:elevation="16dp"
+        android:outlineAmbientShadowColor="@color/Black"
+        android:outlineSpotShadowColor="@color/Black"
+        app:SpinKit_Color="@color/PrimaryPurple" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        >
+        android:id="@+id/details">
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/textBoxStyle"
+            android:textSize="24sp"
             android:hint="Enter the email ID"
             android:layout_margin="16dp"
-            android:id="@+id/editTextSignUpEmail"
-            />
+            android:id="@+id/editTextSignUpEmail" />
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/textBoxStyle"
             android:layout_margin="16dp"
+            android:textSize="24sp"
             android:hint="Enter the password"
             android:password="true"
-            android:id="@+id/editTextSignUpPassword"
-            />
+            android:id="@+id/editTextSignUpPassword" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -41,7 +58,8 @@
                 android:text="Register"
                 android:layout_weight="1"
                 android:layout_margin="8dp"
-                style="@style/buttonStyle"/>
+                style="@style/buttonStyle" />
+
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -49,7 +67,7 @@
                 android:text="Already registered? Login Here"
                 android:layout_weight="1"
                 android:layout_margin="8dp"
-                style="@style/buttonStyle"/>
+                style="@style/buttonStyle" />
         </LinearLayout>
 
     </LinearLayout>

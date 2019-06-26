@@ -6,21 +6,17 @@
     android:layout_height="match_parent">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_margin="8dp"
-        >
+        android:layout_height="250dp"
+        android:orientation="vertical">
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="16dp"
-            android:elevation="16dp"
+            android:elevation="8dp"
             android:outlineAmbientShadowColor="@color/Black"
             android:outlineSpotShadowColor="@color/Black"
             android:translationZ="16dp"
-            app:cardCornerRadius="8dp"
-            >
+            app:cardCornerRadius="8dp">
             <ImageView
                 android:id="@+id/imageViewPoster"
                 android:layout_width="fill_parent"
@@ -28,13 +24,13 @@
                 android:adjustViewBounds="true" />
         </androidx.cardview.widget.CardView>
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="100dp"
             android:layout_height="match_parent"
             android:gravity="center"
-            style="@style/textBoxStyle"
             android:text="Title"
-            android:layout_margin="8dp"
-            android:id="@+id/textViewMovieTitle"
-            />
+            android:textSize="12sp"
+            android:textColor="@color/Black"
+            android:layout_gravity="center"
+            android:id="@+id/textViewMovieTitle" />
     </LinearLayout>
 </LinearLayout>

@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -41,12 +42,13 @@ import java.util.List;
 import javax.net.ssl.HttpsURLConnection;
 
 public class ExploreFragment extends Fragment {
-    String trendingMoviesURL="https://api.themoviedb.org/3/movie/popular?api_key=22cc81522db9e356085d3f567c062e12&language=en-US&page=1";
-    String posterHeaderURL="https://image.tmdb.org/t/p/w200";
+    String trendingMoviesURL = "https://api.themoviedb.org/3/movie/popular?api_key=22cc81522db9e356085d3f567c062e12&language=en-US&page=1";
+    String posterHeaderURL = "https://image.tmdb.org/t/p/w200";
     ArrayList<Movie> MoviesList;
     MovieAdapter mAdapter;
-    ListView movieListView;
-    ArrayList<Bitmap>posterList;
+    //ListView movieListView;
+    GridView movieGridView;
+    ArrayList<Bitmap> posterList;
     LinearLayout exploreFragmentView;
     TextView exploreFragmentWarning;
     ProgressBar progressBar;
@@ -55,12 +57,14 @@ public class ExploreFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
-        movieListView=view.findViewById(R.id.listViewMovies);
-        exploreFragmentView=view.findViewById(R.id.linearLayoutExploreFragment);
-        exploreFragmentWarning=view.findViewById(R.id.textViewExploreStatusWarning);
+        //movieListView = view.findViewById(R.id.listViewMovies);
+        movieGridView=view.findViewById(R.id.listViewMovies);
 
-        MoviesList=new ArrayList<>();
-        posterList=new ArrayList<>();
+        exploreFragmentView = view.findViewById(R.id.linearLayoutExploreFragment);
+        exploreFragmentWarning = view.findViewById(R.id.textViewExploreStatusWarning);
+
+        MoviesList = new ArrayList<>();
+        posterList = new ArrayList<>();
         progressBar = view.findViewById(R.id.spin_kit);
         DoubleBounce myProgressBar = new DoubleBounce();
         progressBar.setIndeterminateDrawable(myProgressBar);
@@ -68,18 +72,18 @@ public class ExploreFragment extends Fragment {
         IMDBAsyncTask task = new IMDBAsyncTask();
         task.execute(trendingMoviesURL);
 
-        movieListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        movieGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Movie currentMovie=mAdapter.getItem(i);
+                Movie currentMovie = mAdapter.getItem(i);
                 Intent movieDetailScreen = new Intent(getActivity(), ExploreMovieDetails.class);
-                Bitmap tempPoster=currentMovie.getPoster();
+                Bitmap tempPoster = currentMovie.getPoster();
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 tempPoster.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] byteArray = stream.toByteArray();
                 movieDetailScreen.putExtra("moviePoster", byteArray);
-                movieDetailScreen.putExtra("movieTitle",currentMovie.getTitle());
-                movieDetailScreen.putExtra("movieOriginalTitle",currentMovie.getOriginalTitle());
+                movieDetailScreen.putExtra("movieTitle", currentMovie.getTitle());
+                movieDetailScreen.putExtra("movieOriginalTitle", currentMovie.getOriginalTitle());
                 movieDetailScreen.putExtra("string_overview", currentMovie.getOverview());
                 movieDetailScreen.putExtra("movieReleaseDate", currentMovie.getReleaseDate());
                 startActivity(movieDetailScreen);
@@ -88,23 +92,26 @@ public class ExploreFragment extends Fragment {
 
         return view;
     }
-    public void onResume(){
+
+    public void onResume() {
         super.onResume();
         ((MainActivity) getActivity())
                 .setActionBarTitle("Explore");
     }
+
     public boolean isNetworkAvailable() {
         try {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
-            return (mNetworkInfo == null) ? false : true;
+            return mNetworkInfo != null;
 
-        }catch (NullPointerException e){
+        } catch (NullPointerException e) {
             return false;
         }
     }
+
     //=============================================================//
-    public void showAlertDialog(String TITLE,String MESSAGE) {
+    public void showAlertDialog(String TITLE, String MESSAGE) {
         new AlertDialog.Builder(getActivity())
                 .setTitle(TITLE)
                 .setMessage(MESSAGE)
@@ -112,20 +119,22 @@ public class ExploreFragment extends Fragment {
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
     }
-    public class IMDBAsyncTask extends AsyncTask<String,Void,String> {
+
+    public class IMDBAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             progressBar.setVisibility(View.VISIBLE);
             //details.setVisibility(View.INVISIBLE);
         }
+
         @Override
         protected String doInBackground(String... strings) {
-            if(isNetworkAvailable()) {
+            if (isNetworkAvailable()) {
                 String res = "str";
                 try {
                     URL url = new URL(strings[0]);
-                    Log.v("IMDB URL:","\n\t\t\t===================="+strings[0]);
+                    Log.v("IMDB URL:", "\n\t\t\t====================" + strings[0]);
                     InputStream inputStream;
                     HttpsURLConnection requestConnection = (HttpsURLConnection) url.openConnection();
                     requestConnection.setReadTimeout(200000);
@@ -137,16 +146,18 @@ public class ExploreFragment extends Fragment {
                     requestConnection.disconnect();
                     return res;
                 } catch (Exception e) {
-                    Log.v("Stack Track SSSS:","\n\t\t\t===================="+e.getStackTrace());
+                    Log.v("Stack Track SSSS:", "\n\t\t\t====================" + e.getStackTrace());
                     e.printStackTrace();
                 }
             }
             return "Error";
         }
+
         @Override
-        protected void onPostExecute(String result){
+        protected void onPostExecute(String result) {
             doActions(result);
         }
+
         private String readFromStream(InputStream inputStream) throws IOException {
             StringBuilder output = new StringBuilder();
             if (inputStream != null) {
@@ -161,19 +172,19 @@ public class ExploreFragment extends Fragment {
             return output.toString();
         }
     }
-    public void doActions(String result){
-        JSONObject root = null;
-        if(result.equals("Error")){
-            showAlertDialog("Connection Error","No data connection found!");
 
-        }
-        else {
+    public void doActions(String result) {
+        JSONObject root = null;
+        if (result.equals("Error")) {
+            showAlertDialog("Connection Error", "No data connection found!");
+
+        } else {
             try {
                 root = new JSONObject(result);
-                String totalPages=root.getString("total_pages");
+                String totalPages = root.getString("total_pages");
                 Toast.makeText(getActivity(), totalPages,
                         Toast.LENGTH_LONG).show();
-                JSONArray resultsArray=root.getJSONArray("results");
+                JSONArray resultsArray = root.getJSONArray("results");
                 String movie_title;
                 String movie_original_title;
                 String language;
@@ -181,7 +192,7 @@ public class ExploreFragment extends Fragment {
                 String release_date;
                 String poster_url;
                 Bitmap movie_poster;
-                for(int i=0;i<resultsArray.length();i++) {
+                for (int i = 0; i < resultsArray.length(); i++) {
                     JSONObject details = resultsArray.getJSONObject(i);
                     movie_title = details.getString("title");
                     movie_original_title = details.getString("original_title");
@@ -189,24 +200,25 @@ public class ExploreFragment extends Fragment {
                     overview = details.getString("overview");
                     release_date = details.getString("release_date");
                     poster_url = posterHeaderURL + details.getString("poster_path");
-                    MoviesList.add(new Movie(movie_title, movie_original_title, language, overview, release_date,poster_url));
+                    MoviesList.add(new Movie(movie_title, movie_original_title, language, overview, release_date, poster_url));
                 }
-            }
-            catch(JSONException e){
+            } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
         performPosterRetrival();
     }
-    public void performPosterRetrival(){
-        String posterUrls[]=new String[MoviesList.size()];
-        for(int i=0;i<MoviesList.size();i++){
-            posterUrls[i]=(MoviesList.get(i).getPosterUrl());
+
+    public void performPosterRetrival() {
+        String[] posterUrls = new String[MoviesList.size()];
+        for (int i = 0; i < MoviesList.size(); i++) {
+            posterUrls[i] = (MoviesList.get(i).getPosterUrl());
         }
         DownloadImageFromInternet imageDownload = new DownloadImageFromInternet();
         imageDownload.execute(posterUrls);
 
     }
+
     //===============================================================================//
     private class DownloadImageFromInternet extends AsyncTask<String, Void, List<Bitmap>> {
         protected List<Bitmap> doInBackground(String... urls) {
@@ -226,19 +238,20 @@ public class ExploreFragment extends Fragment {
             }
             return bitmaps;
         }
+
         protected void onPostExecute(List<Bitmap> result) {
             sendMoviePoster(result);
         }
     }
-    public void sendMoviePoster(List<Bitmap> result){
-        for(int i=0;i<result.size();i++){
+
+    public void sendMoviePoster(List<Bitmap> result) {
+        for (int i = 0; i < result.size(); i++) {
             MoviesList.get(i).setPoster(result.get(i));
         }
-        mAdapter=new MovieAdapter(getActivity(),MoviesList);
-        movieListView.setAdapter(mAdapter);
+        mAdapter = new MovieAdapter(getActivity(), MoviesList);
+        movieGridView.setAdapter(mAdapter);
         exploreFragmentWarning.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
         exploreFragmentView.setVisibility(View.VISIBLE);
-
     }
 }

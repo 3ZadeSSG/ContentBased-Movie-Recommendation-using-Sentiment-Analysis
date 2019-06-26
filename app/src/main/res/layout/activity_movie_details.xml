@@ -6,13 +6,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".MovieDetailsActivity">
+
     <TextView
         android:id="@+id/movieTitleTextView"
         android:layout_width="match_parent"
         android:layout_height="60dp"
+        android:textSize="24sp"
         style="@style/textBoxStyle"
-        android:layout_margin="16dp"
-        />
+        android:layout_margin="16dp" />
+
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -23,34 +25,36 @@
         android:outlineSpotShadowColor="@color/Black"
         android:translationZ="16dp"
         app:cardCornerRadius="8dp">
+
         <ImageView
             android:id="@+id/image_view"
             android:layout_width="fill_parent"
             android:layout_height="200dp"
             android:adjustViewBounds="true" />
     </androidx.cardview.widget.CardView>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:layout_gravity="center"
-        >
+        android:layout_gravity="center">
+
         <TextView
             android:id="@+id/textViewMovieRating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:textSize="24sp"
             style="@style/textBoxStyle"
             android:padding="16dp"
-            android:layout_gravity="center"
-            />
+            android:layout_gravity="center" />
+
         <com.example.majorproject.CircleDisplay
             android:id="@+id/circleDisplay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="16dp"
             android:outlineSpotShadowColor="@color/Black"
-            android:outlineAmbientShadowColor="@color/Black"
-            />
+            android:outlineAmbientShadowColor="@color/Black" />
     </LinearLayout>
 </LinearLayout>
