@@ -246,7 +246,9 @@ public class ExploreFragment extends Fragment {
 
     public void sendMoviePoster(List<Bitmap> result) {
         for (int i = 0; i < result.size(); i++) {
-            MoviesList.get(i).setPoster(result.get(i));
+            Bitmap b=result.get(i);
+            b=Bitmap.createScaledBitmap(b, (int)(b.getWidth() / 2), (int)(b.getHeight() / 2), false);
+            MoviesList.get(i).setPoster(b);
         }
         mAdapter = new MovieAdapter(getActivity(), MoviesList);
         movieGridView.setAdapter(mAdapter);

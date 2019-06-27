@@ -23,7 +23,7 @@ public class TwitterAnalyzerResult extends AppCompatActivity {
         cd = findViewById(R.id.circleDisplay);
         Intent i = getIntent();
         twitter_analyzer_response = i.getStringExtra("response");
-        result = findViewById(R.id.textViewResult);
+        result = findViewById(R.id.textViewResultTwitterAnalyzer);
         showResult();
     }
     void showResult() {
@@ -32,9 +32,11 @@ public class TwitterAnalyzerResult extends AppCompatActivity {
             String s = null;
             s = root.getString("result ");
             Log.v("Result SSSS:", "\n\t\t\t====================" + s);
-            String[] temp = s.split(" ");
-            score = Float.parseFloat(temp[0]);
-            result.setText(s);
+            //String[] temp = s.split(" ");
+            //score = Float.parseFloat(temp[0]);
+            score=Float.parseFloat(s);
+            String temp="Positivity : "+s+" %";
+            result.setText(temp);
             showCircle();
         } catch (JSONException e) {
             e.printStackTrace();

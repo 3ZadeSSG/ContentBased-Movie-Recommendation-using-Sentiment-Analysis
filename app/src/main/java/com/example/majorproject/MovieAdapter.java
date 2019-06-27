@@ -28,8 +28,9 @@ public class MovieAdapter extends ArrayAdapter<Movie> {
         ImageView moviePoster = listItemView.findViewById(R.id.imageViewPoster);
         movieTitle.setText(currentMovie.getTitle());
         //moviePoster.setImageBitmap(currentMovie.getPoster());
-        Bitmap b = currentMovie.getPoster();
-        moviePoster.setImageBitmap(Bitmap.createScaledBitmap(b, (b.getWidth() / 2), (b.getHeight() / 2), false));
+        //Bitmap b = currentMovie.getPoster();
+        //moviePoster.setImageBitmap(Bitmap.createScaledBitmap(b, (int)(b.getWidth() / 2), (int)(b.getHeight() / 2), false));
+        moviePoster.setImageBitmap(currentMovie.getPoster());
         return listItemView;
     }
 }
