@@ -24,6 +24,10 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, FragmentManager.OnBackStackChangedListener {
     TextView userEmailDisplay;
     FirebaseAuth firebaseAuth;
+    Fragment exploreFragment;
+    Fragment movieRaingFragment;
+    Fragment sentimentPredictionFragment;
+    Fragment twitterAnalyzerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,10 @@ public class MainActivity extends AppCompatActivity
             navigationView.setCheckedItem(R.id.nav_movie_rating_search);
         }
         getSupportFragmentManager().addOnBackStackChangedListener(this);
+        exploreFragment=new ExploreFragment();
+        movieRaingFragment=new MovieRatingSearchFragment();
+        sentimentPredictionFragment=new SentimentPredictionFragment();
+        twitterAnalyzerFragment=new TwitterAnalyzerFragment();
     }
 
     @Override
@@ -137,18 +145,36 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_sentiment_prediction) {
             //launch sentiment search fragment
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    sentimentPredictionFragment).commit();
+            /*
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new SentimentPredictionFragment()).commit();
+                    */
         } else if (id == R.id.nav_movie_rating_search) {
             //launch movie rating search fragment
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    movieRaingFragment).commit();
+            /*
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new MovieRatingSearchFragment()).commit();
+                    */
         } else if (id == R.id.nav_twitter_analyzer) {
             //launch twitter analyzer fragment
-        } else if (id == R.id.nav_explore) {
 
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    twitterAnalyzerFragment).commit();
+                    /*
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new TwitterAnalyzerFragment()).commit();
+                    */
+        } else if (id == R.id.nav_explore) {
             //launch explore fragment
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    exploreFragment).commit();
+            /*
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new ExploreFragment()).commit();
+                    */
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
