@@ -10,6 +10,7 @@
     <color name='PrimaryPurple'>#6200EE</color>
     <color name='PurpleMiddle'>#3700B3</color>
     <color name="Black">#000000</color>
+    <color name="LightPurple">#9575CD</color>
 
 
     <color name="DarkStatusBar">#000000</color>
