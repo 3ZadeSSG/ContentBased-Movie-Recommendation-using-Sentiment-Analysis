@@ -45,8 +45,7 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
         buttonLogin.setOnClickListener(this);
 
         if (firebaseAuth.getCurrentUser() != null) {
-            Toast.makeText(Signup.this, "User is already logged in",
-                    Toast.LENGTH_LONG).show();
+            showToast("User is already logged in");
             finish();
             Intent mainActivity = new Intent(Signup.this, MainActivity.class);
             startActivity(mainActivity);
@@ -64,8 +63,7 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
         String email = editTextEmail.getText().toString();
         String password = editTextPassword.getText().toString();
         if (email.equals("") || password.equals("")) {
-            Toast.makeText(Signup.this, "Invalid data",
-                    Toast.LENGTH_LONG).show();
+            showToast("Invalid data");
         } else {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -73,13 +71,11 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 //successfully registered
-                                Toast.makeText(Signup.this, "Registered",
-                                        Toast.LENGTH_LONG).show();
+                                showToast("Registered");
                                 Intent mainActivity = new Intent(Signup.this, MainActivity.class);
                                 startActivity(mainActivity);
                             } else {
-                                Toast.makeText(Signup.this, "Registeration Failed!",
-                                        Toast.LENGTH_LONG).show();
+                                showToast("Registration Failed");
                             }
                         }
                     });
@@ -97,5 +93,9 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
             Intent loginActivity = new Intent(Signup.this, Login.class);
             startActivity(loginActivity);
         }
+    }
+    public void showToast(String toastMessage){
+        Toast.makeText(Signup.this, toastMessage,
+                Toast.LENGTH_LONG).show();
     }
 }

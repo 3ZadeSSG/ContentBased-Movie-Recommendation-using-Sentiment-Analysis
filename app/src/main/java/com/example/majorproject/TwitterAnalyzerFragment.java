@@ -68,7 +68,7 @@ public class TwitterAnalyzerFragment extends Fragment implements View.OnClickLis
                 query += input[i] + "+";
             }
             query += input[input.length - 1];
-            address = "https://major-project-final-fcec1.appspot.com/analyze/";
+            address = "https://major-project-final-246818.appspot.com/analyze/";
             TwitterAnalyzerFragment.TwitterAsyncTask task = new TwitterAnalyzerFragment.TwitterAsyncTask();
             String url = address;
             url = url + query;
@@ -132,10 +132,8 @@ public class TwitterAnalyzerFragment extends Fragment implements View.OnClickLis
                     requestConnection.setConnectTimeout(1000000);
                     requestConnection.setRequestMethod("GET");
                     requestConnection.connect();
-                    //if (requestConnection.getResponseCode() == 200) {
                     inputStream = requestConnection.getInputStream();
                     res = readFromStream(inputStream);
-                    //}
                     requestConnection.disconnect();
                     Log.v("Result:", "\n\t\t\t====================" + res);
                     return res;

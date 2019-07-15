@@ -2,6 +2,7 @@ package com.example.majorproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -45,8 +46,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         buttonBack.setOnClickListener(this);
 
         if (firebaseAuth.getCurrentUser() != null) {
-            Toast.makeText(Login.this, "User is already logged in",
-                    Toast.LENGTH_LONG).show();
+            showToast("User is already logged in");
             finish();
             Intent mainActivity = new Intent(Login.this, MainActivity.class);
             startActivity(mainActivity);
@@ -67,14 +67,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             //successfully registered
-                            Toast.makeText(Login.this, "Signed in",
-                                    Toast.LENGTH_LONG).show();
+                            showToast("Signed in");
                             finish();
                             Intent mainActivity = new Intent(Login.this, MainActivity.class);
                             startActivity(mainActivity);
                         } else {
-                            Toast.makeText(Login.this, "Invalid information! Try again",
-                                    Toast.LENGTH_LONG).show();
+                            showToast("Invalid information! Try again");
                         }
                     }
                 });
@@ -92,5 +90,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             Intent signupActivity = new Intent(Login.this, Signup.class);
             startActivity(signupActivity);
         }
+    }
+    public void showToast(String toastMessage){
+        Toast.makeText(Login.this, toastMessage,
+                Toast.LENGTH_LONG).show();
     }
 }

@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +24,7 @@ import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.github.ybq.android.spinkit.style.DoubleBounce;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,30 +42,31 @@ import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
 
-public class ExploreFragment extends Fragment {
+public class RecommendationFragment extends Fragment {
 
-    String trendingMoviesURL = "https://api.themoviedb.org/3/movie/popular?api_key=22cc81522db9e356085d3f567c062e12&language=en-US&page=1";
-    String posterHeaderURL = "https://image.tmdb.org/t/p/w200";
+    String recommendedMoviesURL="https://major-project-final-246818.appspot.com/getRecommendation/";
+    String uID;
+    FirebaseAuth firebaseAuth;
     ArrayList<Movie> MoviesList;
     MovieAdapter mAdapter;
+    //ListView movieListView;
     GridView movieGridView;
-
-    ArrayList<Bitmap> posterList; //to store the bitmap posters downloaded form internet
-
-    LinearLayout exploreFragmentView;
-    TextView exploreFragmentWarning;
-
-    ProgressBar progressBar; //progressbar to show loading icon when network request is made
+    ArrayList<Bitmap> posterList;
+    LinearLayout recommendationFragmentView;
+    TextView recommendationFragmentWarning;
+    ProgressBar progressBar;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_explore, container, false);
+        View view = inflater.inflate(R.layout.fragment_recommendation, container, false);
         //movieListView = view.findViewById(R.id.listViewMovies);
-        movieGridView=view.findViewById(R.id.listViewMovies);
+        movieGridView=view.findViewById(R.id.listViewRecommendedMovies);
 
-        exploreFragmentView = view.findViewById(R.id.linearLayoutExploreFragment);
-        exploreFragmentWarning = view.findViewById(R.id.textViewExploreStatusWarning);
+        recommendationFragmentView = view.findViewById(R.id.linearLayoutRecommendationFragment);
+        recommendationFragmentWarning = view.findViewById(R.id.textViewExploreStatusWarning);
+        firebaseAuth = FirebaseAuth.getInstance();
+        uID="user"+firebaseAuth.getCurrentUser().getUid();
 
         MoviesList = new ArrayList<>();
         posterList = new ArrayList<>();
@@ -73,13 +74,9 @@ public class ExploreFragment extends Fragment {
         DoubleBounce myProgressBar = new DoubleBounce();
         progressBar.setIndeterminateDrawable(myProgressBar);
 
-        //execuret network request to get the movies and their posters form internet
-        IMDBAsyncTask task = new IMDBAsyncTask();
-        task.execute(trendingMoviesURL);
+        RecommendationFragment.RecommendationAsyncTask task = new RecommendationFragment.RecommendationAsyncTask();
+        task.execute(recommendedMoviesURL+uID);
 
-        /*add action listener to grid view, on clicking the poster, new activity ExploreMovieDetails
-        will be launched to show detailsed view of movie
-         */
         movieGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -89,8 +86,6 @@ public class ExploreFragment extends Fragment {
                 ByteArrayOutputStream stream = new ByteArrayOutputStream();
                 tempPoster.compress(Bitmap.CompressFormat.PNG, 100, stream);
                 byte[] byteArray = stream.toByteArray();
-
-                //add all necessary information about the movie to be passed on the ExploreMovieDetails Activity
                 movieDetailScreen.putExtra("moviePoster", byteArray);
                 movieDetailScreen.putExtra("movieTitle", currentMovie.getTitle());
                 movieDetailScreen.putExtra("movieOriginalTitle", currentMovie.getOriginalTitle());
@@ -100,30 +95,11 @@ public class ExploreFragment extends Fragment {
             }
         });
 
-        /*
-        Pull down to refresh function, if movies are already loaded then no network will be initiated
-        Otherwise initiate network request
-        * */
-        final SwipeRefreshLayout pullToRefresh = view.findViewById(R.id.pullToRefresh);
-        pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                if(MoviesList.size()==0){
-                    refreshData(); // your code
-                    pullToRefresh.setRefreshing(false);
-                }
-                else{
-                    Toast.makeText(getActivity(), "Already Loaded with latest data",
-                            Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+
+
         return view;
     }
-    public void refreshData(){
-        IMDBAsyncTask task = new IMDBAsyncTask();
-        task.execute(trendingMoviesURL);
-    }
+
 
     public void onResume() {
         super.onResume();
@@ -131,7 +107,6 @@ public class ExploreFragment extends Fragment {
                 .setActionBarTitle("Explore");
     }
 
-    //check if device is connected to internet
     public boolean isNetworkAvailable() {
         try {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -143,9 +118,7 @@ public class ExploreFragment extends Fragment {
         }
     }
 
-    /*=============================================================
-    Show alert dialog function, to be used by function when no internet connection is found or any other errors
-    * */
+    //=============================================================//
     public void showAlertDialog(String TITLE, String MESSAGE) {
         new AlertDialog.Builder(getActivity())
                 .setTitle(TITLE)
@@ -155,21 +128,13 @@ public class ExploreFragment extends Fragment {
                 .show();
     }
 
-    /**==================================================================
-     * Inherited AsyncTask to download the movie details form server and
-     * pass the received string to process as a JSON response to reterive the information
-     */
-
-    public class IMDBAsyncTask extends AsyncTask<String, Void, String> {
+    public class RecommendationAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             progressBar.setVisibility(View.VISIBLE);
             //details.setVisibility(View.INVISIBLE);
         }
-        /**
-         * If network is available then process request otherwise return Error as result
-         */
 
         @Override
         protected String doInBackground(String... strings) {
@@ -189,13 +154,13 @@ public class ExploreFragment extends Fragment {
                     requestConnection.disconnect();
                     return res;
                 } catch (Exception e) {
+                    Log.v("Stack Track SSSS:", "\n\t\t\t====================" + e.getStackTrace());
                     e.printStackTrace();
                 }
             }
             return "Error";
         }
 
-        //call doActions function to perform update on UI
         @Override
         protected void onPostExecute(String result) {
             doActions(result);
@@ -216,10 +181,6 @@ public class ExploreFragment extends Fragment {
         }
     }
 
-    /*If result is not Error then initiate the moviePoster downloader and download movie posters on list,
-    and then call the UI update.
-    If error then show alert dialog about connection error
-    * */
     public void doActions(String result) {
         JSONObject root = null;
         if (result.equals("Error")) {
@@ -228,10 +189,8 @@ public class ExploreFragment extends Fragment {
         } else {
             try {
                 root = new JSONObject(result);
-                String totalPages = root.getString("total_pages");
-                Toast.makeText(getActivity(), totalPages,
-                        Toast.LENGTH_LONG).show();
-                JSONArray resultsArray = root.getJSONArray("results");
+
+                JSONArray resultsArray = root.getJSONArray("result");
                 String movie_title;
                 String movie_original_title;
                 String language;
@@ -242,11 +201,11 @@ public class ExploreFragment extends Fragment {
                 for (int i = 0; i < resultsArray.length(); i++) {
                     JSONObject details = resultsArray.getJSONObject(i);
                     movie_title = details.getString("title");
-                    movie_original_title = details.getString("original_title");
-                    language = details.getString("original_language");
+                    movie_original_title = details.getString("title");
+                    language = "English";
                     overview = details.getString("overview");
-                    release_date = details.getString("release_date");
-                    poster_url = posterHeaderURL + details.getString("poster_path");
+                    release_date = details.getString("release");
+                    poster_url = details.getString("poster");
                     MoviesList.add(new Movie(movie_title, movie_original_title, language, overview, release_date, poster_url));
                 }
             } catch (JSONException e) {
@@ -256,22 +215,17 @@ public class ExploreFragment extends Fragment {
         performPosterRetrival();
     }
 
-    /*Get all poster urls in a string of array and pass it as argument of ImageDownloader  Async Task,
-   to download the posters
-    * */
     public void performPosterRetrival() {
         String[] posterUrls = new String[MoviesList.size()];
         for (int i = 0; i < MoviesList.size(); i++) {
             posterUrls[i] = (MoviesList.get(i).getPosterUrl());
         }
-        DownloadImageFromInternet imageDownload = new DownloadImageFromInternet();
+        RecommendationFragment.DownloadImageFromInternet imageDownload = new RecommendationFragment.DownloadImageFromInternet();
         imageDownload.execute(posterUrls);
 
     }
 
-    /*===============================================================================
-    Async Task to download the posters form array of urls, passed as string array.
-    * */
+    //===============================================================================//
     private class DownloadImageFromInternet extends AsyncTask<String, Void, List<Bitmap>> {
         protected List<Bitmap> doInBackground(String... urls) {
             List<Bitmap> bitmaps = new ArrayList<Bitmap>();
@@ -296,21 +250,16 @@ public class ExploreFragment extends Fragment {
         }
     }
 
-    /*Set the movie poster to downloaded bitmap image, since we are showing only thumbnail
-    on ImageView it is much better to scale down resolution to save space.
-    * */
     public void sendMoviePoster(List<Bitmap> result) {
         for (int i = 0; i < result.size(); i++) {
             Bitmap b=result.get(i);
-            b=Bitmap.createScaledBitmap(b, (int)(b.getWidth() / 2), (int)(b.getHeight() / 2), false);
+            b=Bitmap.createScaledBitmap(b, (int)(b.getWidth() / 3), (int)(b.getHeight() / 3), false);
             MoviesList.get(i).setPoster(b);
         }
         mAdapter = new MovieAdapter(getActivity(), MoviesList);
         movieGridView.setAdapter(mAdapter);
-
-        //hide the warning textview and progress bar and show the fragment containing movies
-        exploreFragmentWarning.setVisibility(View.GONE);
+        recommendationFragmentWarning.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
-        exploreFragmentView.setVisibility(View.VISIBLE);
+        recommendationFragmentView.setVisibility(View.VISIBLE);
     }
 }

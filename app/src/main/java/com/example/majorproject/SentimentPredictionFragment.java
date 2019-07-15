@@ -67,7 +67,8 @@ public class SentimentPredictionFragment extends Fragment implements View.OnClic
             }
             review += input[input.length - 1];
             //address = "https://sentiment-android.herokuapp.com/multi/";
-            address = "https://major-project-final-fcec1.appspot.com/sentiment/";
+            address = "https://major-project-final-246818.appspot.com/sentiment/";
+
             SentimentAsyncTask task = new SentimentAsyncTask();
             String url = address;
             url = url + review;

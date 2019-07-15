@@ -20,6 +20,11 @@
             android:id="@+id/nav_explore"
             android:icon="@drawable/ic_explore"
             android:title="Explore Content" />
+        <item
+            android:id="@+id/nav_recommendation"
+            android:title="Recommended Movies"
+            android:icon="@drawable/ic_recommendation"
+            />
     </group>
 
     <item android:title="User Profile Commands">

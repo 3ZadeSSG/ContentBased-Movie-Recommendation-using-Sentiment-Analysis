@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity
     Fragment sentimentFragment;
     Fragment analyzerFragment;
     Fragment ratingFragment;
+    Fragment recommendationFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity
         sentimentFragment=new SentimentPredictionFragment();
         analyzerFragment=new TwitterAnalyzerFragment();
         ratingFragment=new MovieRatingSearchFragment();
+        recommendationFragment=new RecommendationFragment();
 
     }
 
@@ -114,6 +116,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case "rating":
                 result=new MovieRatingSearchFragment();
+                break;
+            case "recommendation":
+                result=new RecommendationFragment();
                 break;
 
         }
@@ -203,6 +208,11 @@ public class MainActivity extends AppCompatActivity
             {
                 //openFragment(exploreFragment,"explore");
                 replaceFragment("explore");
+            }
+            break;
+            case R.id.nav_recommendation:
+            {
+                replaceFragment("recommendation");
             }
             break;
         }
