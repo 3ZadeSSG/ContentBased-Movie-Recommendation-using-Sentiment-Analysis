@@ -2,7 +2,6 @@ package com.example.majorproject;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -91,7 +90,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             startActivity(signupActivity);
         }
     }
-    public void showToast(String toastMessage){
+
+    public void showToast(String toastMessage) {
         Toast.makeText(Login.this, toastMessage,
                 Toast.LENGTH_LONG).show();
     }

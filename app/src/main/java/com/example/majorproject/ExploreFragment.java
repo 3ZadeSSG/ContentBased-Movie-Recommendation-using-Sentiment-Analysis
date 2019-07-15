@@ -15,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,7 +61,7 @@ public class ExploreFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
         //movieListView = view.findViewById(R.id.listViewMovies);
-        movieGridView=view.findViewById(R.id.listViewMovies);
+        movieGridView = view.findViewById(R.id.listViewMovies);
 
         exploreFragmentView = view.findViewById(R.id.linearLayoutExploreFragment);
         exploreFragmentWarning = view.findViewById(R.id.textViewExploreStatusWarning);
@@ -108,11 +107,10 @@ public class ExploreFragment extends Fragment {
         pullToRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                if(MoviesList.size()==0){
+                if (MoviesList.size() == 0) {
                     refreshData(); // your code
                     pullToRefresh.setRefreshing(false);
-                }
-                else{
+                } else {
                     Toast.makeText(getActivity(), "Already Loaded with latest data",
                             Toast.LENGTH_LONG).show();
                 }
@@ -120,7 +118,8 @@ public class ExploreFragment extends Fragment {
         });
         return view;
     }
-    public void refreshData(){
+
+    public void refreshData() {
         IMDBAsyncTask task = new IMDBAsyncTask();
         task.execute(trendingMoviesURL);
     }
@@ -155,7 +154,8 @@ public class ExploreFragment extends Fragment {
                 .show();
     }
 
-    /**==================================================================
+    /**
+     * ==================================================================
      * Inherited AsyncTask to download the movie details form server and
      * pass the received string to process as a JSON response to reterive the information
      */
@@ -167,6 +167,7 @@ public class ExploreFragment extends Fragment {
             progressBar.setVisibility(View.VISIBLE);
             //details.setVisibility(View.INVISIBLE);
         }
+
         /**
          * If network is available then process request otherwise return Error as result
          */
@@ -301,8 +302,8 @@ public class ExploreFragment extends Fragment {
     * */
     public void sendMoviePoster(List<Bitmap> result) {
         for (int i = 0; i < result.size(); i++) {
-            Bitmap b=result.get(i);
-            b=Bitmap.createScaledBitmap(b, (int)(b.getWidth() / 2), (int)(b.getHeight() / 2), false);
+            Bitmap b = result.get(i);
+            b = Bitmap.createScaledBitmap(b, (b.getWidth() / 2), (b.getHeight() / 2), false);
             MoviesList.get(i).setPoster(b);
         }
         mAdapter = new MovieAdapter(getActivity(), MoviesList);

@@ -4,10 +4,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="250dp"
         android:orientation="vertical">
+
         <androidx.cardview.widget.CardView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -17,12 +19,14 @@
             android:outlineSpotShadowColor="@color/Black"
             android:translationZ="16dp"
             app:cardCornerRadius="8dp">
+
             <ImageView
                 android:id="@+id/imageViewPoster"
                 android:layout_width="fill_parent"
                 android:layout_height="150dp"
                 android:adjustViewBounds="true" />
         </androidx.cardview.widget.CardView>
+
         <TextView
             android:layout_width="100dp"
             android:layout_height="match_parent"

@@ -1,11 +1,11 @@
 package com.example.majorproject;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -15,6 +15,7 @@ public class TwitterAnalyzerResult extends AppCompatActivity {
     TextView result;
     CircleDisplay cd;
     float score;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,6 +27,7 @@ public class TwitterAnalyzerResult extends AppCompatActivity {
         result = findViewById(R.id.textViewResultTwitterAnalyzer);
         showResult();
     }
+
     void showResult() {
         try {
             JSONObject root = new JSONObject(twitter_analyzer_response);
@@ -34,14 +36,15 @@ public class TwitterAnalyzerResult extends AppCompatActivity {
             Log.v("Result SSSS:", "\n\t\t\t====================" + s);
             //String[] temp = s.split(" ");
             //score = Float.parseFloat(temp[0]);
-            score=Float.parseFloat(s);
-            String temp="Positivity : "+s+" %";
+            score = Float.parseFloat(s);
+            String temp = "Positivity : " + s + " %";
             result.setText(temp);
             showCircle();
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
     void showCircle() {
         cd.setAnimDuration(3000);
         cd.setValueWidthPercent(55f);

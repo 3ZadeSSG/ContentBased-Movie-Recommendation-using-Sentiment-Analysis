@@ -43,16 +43,17 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
     String likeURL;
     String dislikeURL;
     String uID;
-    Boolean flag=true;
+    Boolean flag = true;
     FirebaseAuth firebaseAuth;
     Button buttonLaunchGoogle;
     Button buttonLike, buttonDislike;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
-        likeURL="https://major-project-final-246818.appspot.com/addLike/";
-        dislikeURL="https://major-project-final-246818.appspot.com/addLike/";
+        likeURL = "https://major-project-final-246818.appspot.com/addLike/";
+        dislikeURL = "https://major-project-final-246818.appspot.com/addLike/";
         buttonLaunchGoogle = findViewById(R.id.buttonLaunchInternet);
         buttonLike = findViewById(R.id.buttonLike);
         buttonDislike = findViewById(R.id.buttonDislike);
@@ -79,7 +80,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
         buttonLike.setOnClickListener(this);
         buttonDislike.setOnClickListener(this);
         firebaseAuth = FirebaseAuth.getInstance();
-        uID="user"+firebaseAuth.getCurrentUser().getUid();
+        uID = "user" + firebaseAuth.getCurrentUser().getUid();
 
         String[] input = movieTitle.split(" ");
         String address2 = "";
@@ -87,8 +88,8 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
             address2 += input[i] + "+";
         }
         address2 += input[input.length - 1];
-        likeURL=likeURL+uID+"+"+address2;
-        dislikeURL=dislikeURL+uID+"+"+address2;
+        likeURL = likeURL + uID + "+" + address2;
+        dislikeURL = dislikeURL + uID + "+" + address2;
     }
 
     void showCircle() {
@@ -126,13 +127,13 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
             startActivity(intent);
         }
         if (view == buttonLike) {
-            flag=true;
-            MovieDetailsActivity.LikeDislikeAsyncTask task=new MovieDetailsActivity.LikeDislikeAsyncTask();
+            flag = true;
+            MovieDetailsActivity.LikeDislikeAsyncTask task = new MovieDetailsActivity.LikeDislikeAsyncTask();
             task.execute(likeURL);
         }
         if (view == buttonDislike) {
-            flag=false;
-            MovieDetailsActivity.LikeDislikeAsyncTask task=new MovieDetailsActivity.LikeDislikeAsyncTask();
+            flag = false;
+            MovieDetailsActivity.LikeDislikeAsyncTask task = new MovieDetailsActivity.LikeDislikeAsyncTask();
             task.execute(dislikeURL);
         }
 
@@ -152,7 +153,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
 
     public boolean isNetworkAvailable() {
         try {
-            ConnectivityManager mConnectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
             return mNetworkInfo != null;
 
@@ -160,6 +161,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
             return false;
         }
     }
+
     public class LikeDislikeAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
@@ -213,11 +215,11 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
             return output.toString();
         }
     }
-    public void doActions(String result){
-        if(result.equals("Error")){
+
+    public void doActions(String result) {
+        if (result.equals("Error")) {
             showToast("Server communication failure, please try again later");
-        }
-        else {
+        } else {
             if (flag == true) {
                 showToast("Added to likes");
             } else {
@@ -226,7 +228,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
-    public void showToast(String toastMessage){
+    public void showToast(String toastMessage) {
         Toast.makeText(MovieDetailsActivity.this, toastMessage,
                 Toast.LENGTH_LONG).show();
     }

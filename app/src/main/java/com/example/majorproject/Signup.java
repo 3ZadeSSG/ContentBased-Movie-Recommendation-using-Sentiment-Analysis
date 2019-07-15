@@ -94,7 +94,8 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
             startActivity(loginActivity);
         }
     }
-    public void showToast(String toastMessage){
+
+    public void showToast(String toastMessage) {
         Toast.makeText(Signup.this, toastMessage,
                 Toast.LENGTH_LONG).show();
     }

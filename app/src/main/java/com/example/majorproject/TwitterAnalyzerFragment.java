@@ -2,7 +2,6 @@ package com.example.majorproject;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -52,6 +51,7 @@ public class TwitterAnalyzerFragment extends Fragment implements View.OnClickLis
         buttonTwitterQuery.setOnClickListener(this);
         return view;
     }
+
     public void onResume() {
         super.onResume();
         ((MainActivity) getActivity())
@@ -75,6 +75,7 @@ public class TwitterAnalyzerFragment extends Fragment implements View.OnClickLis
             task.execute(url);
         }
     }
+
     //===============================================================//
     public boolean isNetworkAvailable() {
         try {
@@ -87,6 +88,7 @@ public class TwitterAnalyzerFragment extends Fragment implements View.OnClickLis
 
         }
     }
+
     public void doActions(String result) {
         if (!result.equals("Error")) {
             try {

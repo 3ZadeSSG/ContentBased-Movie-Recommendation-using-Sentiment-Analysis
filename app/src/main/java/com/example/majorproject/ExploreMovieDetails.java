@@ -50,7 +50,7 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
     String likeURL;
     String dislikeURL;
     String uID;
-    Boolean flag=true;
+    Boolean flag = true;
     FirebaseAuth firebaseAuth;
 
     @Override
@@ -59,8 +59,8 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_explore_movie_details);
 
 
-        likeURL="https://major-project-final-246818.appspot.com/addLike/";
-        dislikeURL="https://major-project-final-246818.appspot.com/addLike/";
+        likeURL = "https://major-project-final-246818.appspot.com/addLike/";
+        dislikeURL = "https://major-project-final-246818.appspot.com/addLike/";
 
         textViewTitle = findViewById(R.id.textViewMovieTitle);
         textViewOriginalTitle = findViewById(R.id.textViewMovieOriginalTitle);
@@ -88,7 +88,7 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
 
         //get the user id to be added with url request to call API function
         firebaseAuth = FirebaseAuth.getInstance();
-        uID="user"+firebaseAuth.getCurrentUser().getUid();
+        uID = "user" + firebaseAuth.getCurrentUser().getUid();
 
         String[] input = movieName.split(" ");
         String address2 = "";
@@ -96,8 +96,8 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
             address2 += input[i] + "+";
         }
         address2 += input[input.length - 1];
-        likeURL=likeURL+uID+"+"+address2;
-        dislikeURL=dislikeURL+uID+"+"+address2;
+        likeURL = likeURL + uID + "+" + address2;
+        dislikeURL = dislikeURL + uID + "+" + address2;
 
     }
 
@@ -115,19 +115,20 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
             startActivity(intent);
         }
         if (view == buttonLike) {
-            flag=true;
-            LikeDislikeAsyncTask task=new LikeDislikeAsyncTask();
+            flag = true;
+            LikeDislikeAsyncTask task = new LikeDislikeAsyncTask();
             task.execute(likeURL);
         }
         if (view == buttonDislike) {
-            flag=false;
-            LikeDislikeAsyncTask task=new LikeDislikeAsyncTask();
+            flag = false;
+            LikeDislikeAsyncTask task = new LikeDislikeAsyncTask();
             task.execute(dislikeURL);
         }
     }
+
     public boolean isNetworkAvailable() {
         try {
-            ConnectivityManager mConnectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+            ConnectivityManager mConnectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo mNetworkInfo = mConnectivityManager.getActiveNetworkInfo();
             return mNetworkInfo != null;
 
@@ -192,11 +193,11 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
             return output.toString();
         }
     }
-    public void doActions(String result){
-        if(result.equals("Error")){
+
+    public void doActions(String result) {
+        if (result.equals("Error")) {
             showToast("Server communication failure, please try again later");
-        }
-        else {
+        } else {
             if (flag == true) {
                 showToast("Added to likes");
             } else {
@@ -205,7 +206,7 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
         }
     }
 
-    public void showToast(String toastMessage){
+    public void showToast(String toastMessage) {
         Toast.makeText(ExploreMovieDetails.this, toastMessage,
                 Toast.LENGTH_LONG).show();
     }

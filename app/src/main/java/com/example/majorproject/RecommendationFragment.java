@@ -17,11 +17,9 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,7 +42,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class RecommendationFragment extends Fragment {
 
-    String recommendedMoviesURL="https://major-project-final-246818.appspot.com/getRecommendation/";
+    String recommendedMoviesURL = "https://major-project-final-246818.appspot.com/getRecommendation/";
     String uID;
     FirebaseAuth firebaseAuth;
     ArrayList<Movie> MoviesList;
@@ -61,12 +59,12 @@ public class RecommendationFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recommendation, container, false);
         //movieListView = view.findViewById(R.id.listViewMovies);
-        movieGridView=view.findViewById(R.id.listViewRecommendedMovies);
+        movieGridView = view.findViewById(R.id.listViewRecommendedMovies);
 
         recommendationFragmentView = view.findViewById(R.id.linearLayoutRecommendationFragment);
         recommendationFragmentWarning = view.findViewById(R.id.textViewExploreStatusWarning);
         firebaseAuth = FirebaseAuth.getInstance();
-        uID="user"+firebaseAuth.getCurrentUser().getUid();
+        uID = "user" + firebaseAuth.getCurrentUser().getUid();
 
         MoviesList = new ArrayList<>();
         posterList = new ArrayList<>();
@@ -75,7 +73,7 @@ public class RecommendationFragment extends Fragment {
         progressBar.setIndeterminateDrawable(myProgressBar);
 
         RecommendationFragment.RecommendationAsyncTask task = new RecommendationFragment.RecommendationAsyncTask();
-        task.execute(recommendedMoviesURL+uID);
+        task.execute(recommendedMoviesURL + uID);
 
         movieGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -94,7 +92,6 @@ public class RecommendationFragment extends Fragment {
                 startActivity(movieDetailScreen);
             }
         });
-
 
 
         return view;
@@ -252,8 +249,8 @@ public class RecommendationFragment extends Fragment {
 
     public void sendMoviePoster(List<Bitmap> result) {
         for (int i = 0; i < result.size(); i++) {
-            Bitmap b=result.get(i);
-            b=Bitmap.createScaledBitmap(b, (int)(b.getWidth() / 3), (int)(b.getHeight() / 3), false);
+            Bitmap b = result.get(i);
+            b = Bitmap.createScaledBitmap(b, (b.getWidth() / 3), (b.getHeight() / 3), false);
             MoviesList.get(i).setPoster(b);
         }
         mAdapter = new MovieAdapter(getActivity(), MoviesList);

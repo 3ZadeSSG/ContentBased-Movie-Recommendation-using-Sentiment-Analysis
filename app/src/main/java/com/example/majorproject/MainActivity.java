@@ -67,11 +67,11 @@ public class MainActivity extends AppCompatActivity
         }
         getSupportFragmentManager().addOnBackStackChangedListener(this);
 
-        exploreFragment=new ExploreFragment();
-        sentimentFragment=new SentimentPredictionFragment();
-        analyzerFragment=new TwitterAnalyzerFragment();
-        ratingFragment=new MovieRatingSearchFragment();
-        recommendationFragment=new RecommendationFragment();
+        exploreFragment = new ExploreFragment();
+        sentimentFragment = new SentimentPredictionFragment();
+        analyzerFragment = new TwitterAnalyzerFragment();
+        ratingFragment = new MovieRatingSearchFragment();
+        recommendationFragment = new RecommendationFragment();
 
     }
 
@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
     private void replaceFragment(String tag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity
         }
         transaction.commit();
     }
+
     private Fragment createFragment(String tag) {
         Fragment result = null;
         switch (tag) {
@@ -115,16 +117,17 @@ public class MainActivity extends AppCompatActivity
                 result = new TwitterAnalyzerFragment();
                 break;
             case "rating":
-                result=new MovieRatingSearchFragment();
+                result = new MovieRatingSearchFragment();
                 break;
             case "recommendation":
-                result=new RecommendationFragment();
+                result = new RecommendationFragment();
                 break;
 
         }
         Log.d("Fragment", "create: ===================" + result.toString());
         return result;
     }
+
     /*
     private void openFragment(Fragment fragment, String tag) {
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -147,9 +150,8 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
 
         int id = item.getItemId();
-        switch(id){
-            case R.id.nav_exit:
-            {
+        switch (id) {
+            case R.id.nav_exit: {
                 new AlertDialog.Builder(this)
                         .setTitle("Please conform")
                         .setMessage("Do you really want to exit?")
@@ -166,9 +168,8 @@ public class MainActivity extends AppCompatActivity
                         })
                         .setNegativeButton("No", null).show();
             }
-                break;
-            case R.id.nav_logout:
-            {
+            break;
+            case R.id.nav_logout: {
                 new AlertDialog.Builder(this)
                         .setTitle("Please conform")
                         .setMessage("Do you really want to logout?")
@@ -186,32 +187,27 @@ public class MainActivity extends AppCompatActivity
                         .setNegativeButton("No", null).show();
             }
             break;
-            case R.id.nav_sentiment_prediction:
-            {
+            case R.id.nav_sentiment_prediction: {
                 //openFragment(sentimentFragment,"sentiment");
                 replaceFragment("sentiment");
             }
             break;
-            case R.id.nav_movie_rating_search:
-            {
+            case R.id.nav_movie_rating_search: {
                 //openFragment(ratingFragment,"rating");
                 replaceFragment("rating");
             }
             break;
-            case R.id.nav_twitter_analyzer:
-            {
+            case R.id.nav_twitter_analyzer: {
                 //openFragment(analyzerFragment,"analyzer");
                 replaceFragment("analyzer");
             }
             break;
-            case R.id.nav_explore:
-            {
+            case R.id.nav_explore: {
                 //openFragment(exploreFragment,"explore");
                 replaceFragment("explore");
             }
             break;
-            case R.id.nav_recommendation:
-            {
+            case R.id.nav_recommendation: {
                 replaceFragment("recommendation");
             }
             break;
