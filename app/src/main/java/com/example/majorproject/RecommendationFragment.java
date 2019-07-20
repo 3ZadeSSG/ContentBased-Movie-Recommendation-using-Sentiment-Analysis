@@ -269,7 +269,6 @@ public class RecommendationFragment extends Fragment {
             }
             return bitmaps;
         }
-
         protected void onPostExecute(List<Bitmap> result) {
             sendMoviePoster(result);
         }
