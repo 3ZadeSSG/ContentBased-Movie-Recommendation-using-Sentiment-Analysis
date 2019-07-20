@@ -9,7 +9,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -39,29 +38,38 @@ Functionality:
 * */
 
 public class ExploreMovieDetails extends AppCompatActivity implements View.OnClickListener {
-    TextView textViewOverview;
-    TextView textViewTitle;
-    TextView textViewOriginalTitle;
-    TextView textViewReleaseDate;
-    ImageView imageViewPoster;
+    //For showing movie details, basic viewholders of data
+    TextView textViewOverview; //Overview of movie
+    TextView textViewTitle; //Title
+    TextView textViewOriginalTitle; //Original Title
+    TextView textViewReleaseDate; //Release Data
+    ImageView imageViewPoster;  //Poster Thumbnail
+
+    //Layout buttons and request URLs
     String movieName;
     Button buttonLaunchGoogle;
     Button buttonLike, buttonDislike;
     String likeURL;
     String dislikeURL;
     String uID;
+
+    //flag to identify like or dislike actions, to be used by toast method
     Boolean flag = true;
+
+    //Firebase authentication object to retrieve userID
     FirebaseAuth firebaseAuth;
 
+    /*Method by default called by Android whenever new View is created*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_explore_movie_details);
 
-
+        //Server API address for Like/Dislike Action
         likeURL = "https://major-project-final-246818.appspot.com/addLike/";
-        dislikeURL = "https://major-project-final-246818.appspot.com/addLike/";
+        dislikeURL = "https://major-project-final-246818.appspot.com/addDislike/";
 
+        //Initialize all views and variables
         textViewTitle = findViewById(R.id.textViewMovieTitle);
         textViewOriginalTitle = findViewById(R.id.textViewMovieOriginalTitle);
         textViewReleaseDate = findViewById(R.id.textViewReleaseDate);
@@ -71,10 +79,12 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
         buttonLike = findViewById(R.id.buttonLike);
         buttonDislike = findViewById(R.id.buttonDislike);
 
+        //Parse the values that was passed by previous view class
         Bundle extras = getIntent().getExtras();
         byte[] byteArray = extras.getByteArray("moviePoster");
         Bitmap moviePoster = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
 
+        //Set the details of movie
         imageViewPoster.setImageBitmap(moviePoster);
         textViewOverview.setText("Overview" + "\n" + extras.getString("string_overview"));
         movieName = extras.getString("movieTitle");
@@ -82,6 +92,7 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
         textViewOriginalTitle.setText("Original Title: " + extras.getString("movieOriginalTitle"));
         textViewReleaseDate.setText("Release Date: " + extras.getString("movieReleaseDate"));
 
+        //Add action listener to the Like, Dislike and More details button
         buttonLaunchGoogle.setOnClickListener(this);
         buttonLike.setOnClickListener(this);
         buttonDislike.setOnClickListener(this);
@@ -90,6 +101,8 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
         firebaseAuth = FirebaseAuth.getInstance();
         uID = "user" + firebaseAuth.getCurrentUser().getUid();
 
+        //Process the user Like/Dislike API call address in advance
+        //Format is: API Address/UserID+MovieTitle
         String[] input = movieName.split(" ");
         String address2 = "";
         for (int i = 0; i < input.length - 1; i++) {
@@ -101,9 +114,11 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
 
     }
 
+    //For each layout clicked call the necessary functions to perform actions accordingly
     @Override
     public void onClick(View view) {
         if (view == buttonLaunchGoogle) {
+            //Launch the browser to find out more details about movie
             String escapedQuery = null;
             try {
                 escapedQuery = URLEncoder.encode(movieName, "UTF-8");
@@ -115,17 +130,24 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
             startActivity(intent);
         }
         if (view == buttonLike) {
+            //Call server method to add movie to liked list for user
             flag = true;
+            buttonLike.setBackground(getResources().getDrawable(R.drawable.ic_button_like_red));
+            buttonDislike.setBackground(getResources().getDrawable(R.drawable.ic_dislike));
             LikeDislikeAsyncTask task = new LikeDislikeAsyncTask();
             task.execute(likeURL);
         }
         if (view == buttonDislike) {
+            //Call server method to add movie to disliked list for user
             flag = false;
+            buttonLike.setBackground(getResources().getDrawable(R.drawable.ic_like));
+            buttonDislike.setBackground(getResources().getDrawable(R.drawable.ic_button_dislike_red));
             LikeDislikeAsyncTask task = new LikeDislikeAsyncTask();
             task.execute(dislikeURL);
         }
     }
 
+    /*Method to check if network is available*/
     public boolean isNetworkAvailable() {
         try {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -137,9 +159,27 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
         }
     }
 
-    /*=============================================================================================
-    Send data to url passed, the function written on sever will save data about user accordingly
-     */
+    /*Method to call toast request for each response*/
+    public void doActions(String result) {
+        if (result.equals("Error")) {
+            showToast("Server communication failure, please try again later");
+        } else {
+            if (flag == true) {
+                showToast("Added to likes");
+            } else {
+
+                showToast("Added to dislikes");
+            }
+        }
+    }
+
+    /*Method to show short time toast messages*/
+    public void showToast(String toastMessage) {
+        Toast.makeText(ExploreMovieDetails.this, toastMessage,
+                Toast.LENGTH_LONG).show();
+    }
+
+    /*Send data to url passed, the function written on sever will save data about user accordingly*/
     public class LikeDislikeAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
@@ -158,12 +198,9 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
                     requestConnection.setConnectTimeout(100000);
                     requestConnection.setRequestMethod("GET");
                     requestConnection.connect();
-                    //if (requestConnection.getResponseCode() == 200) {
                     inputStream = requestConnection.getInputStream();
                     res = readFromStream(inputStream);
-                    //}
                     requestConnection.disconnect();
-                    Log.v("Result:", "\n\t\t\t====================" + res);
                     return res;
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -172,13 +209,14 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
             return "Error";
         }
 
+        /*After network request is made, call the actions function to perform post layout updates
+         * Since onPostExecute doesn't allows layout update commands*/
         @Override
         protected void onPostExecute(String result) {
             doActions(result);
-            ///progressBar.setVisibility(View.INVISIBLE);
-            //details.setVisibility(View.VISIBLE);
         }
 
+        //Stream reader used to retrieve data from inputStreamReader
         private String readFromStream(InputStream inputStream) throws IOException {
             StringBuilder output = new StringBuilder();
             if (inputStream != null) {
@@ -192,22 +230,5 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
             }
             return output.toString();
         }
-    }
-
-    public void doActions(String result) {
-        if (result.equals("Error")) {
-            showToast("Server communication failure, please try again later");
-        } else {
-            if (flag == true) {
-                showToast("Added to likes");
-            } else {
-                showToast("Added to dislikes");
-            }
-        }
-    }
-
-    public void showToast(String toastMessage) {
-        Toast.makeText(ExploreMovieDetails.this, toastMessage,
-                Toast.LENGTH_LONG).show();
     }
 }

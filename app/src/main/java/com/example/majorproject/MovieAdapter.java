@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+/*Inherited from ArrayAdapter to reduce memory overhead for layout which shows a list.
+Works by recycling views to create new one when scrolling
+* */
 public class MovieAdapter extends ArrayAdapter<Movie> {
     public MovieAdapter(Activity context, ArrayList<Movie> arr) {
         super(context, 0, arr);
@@ -26,9 +29,6 @@ public class MovieAdapter extends ArrayAdapter<Movie> {
         TextView movieTitle = listItemView.findViewById(R.id.textViewMovieTitle);
         ImageView moviePoster = listItemView.findViewById(R.id.imageViewPoster);
         movieTitle.setText(currentMovie.getTitle());
-        //moviePoster.setImageBitmap(currentMovie.getPoster());
-        //Bitmap b = currentMovie.getPoster();
-        //moviePoster.setImageBitmap(Bitmap.createScaledBitmap(b, (int)(b.getWidth() / 2), (int)(b.getHeight() / 2), false));
         moviePoster.setImageBitmap(currentMovie.getPoster());
         return listItemView;
     }

@@ -43,41 +43,55 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class ExploreFragment extends Fragment {
 
+    //API address to get trending movies
     String trendingMoviesURL = "https://api.themoviedb.org/3/movie/popular?api_key=22cc81522db9e356085d3f567c062e12&language=en-US&page=1";
+
+    //API address to get poster of size 200px width
     String posterHeaderURL = "https://image.tmdb.org/t/p/w200";
+
+    //List to store Movie objects which contain details about each movie
     ArrayList<Movie> MoviesList;
+
+    //Used to inherit ArrayAdapter of Android
     MovieAdapter mAdapter;
+
+    //GridView to show the movies in grid based layout
     GridView movieGridView;
 
-    ArrayList<Bitmap> posterList; //to store the bitmap posters downloaded form internet
+    //to store the bitmap posters downloaded form internet
+    ArrayList<Bitmap> posterList;
 
+    //Fragment Layout container containing gridview to show the result
     LinearLayout exploreFragmentView;
+
+    //Textview to show warning and error messages received form server
     TextView exploreFragmentWarning;
 
-    ProgressBar progressBar; //progressbar to show loading icon when network request is made
+    //progressbar to show loading icon when network request is made
+    ProgressBar progressBar;
 
+    /* Default method called by android os when a new view is created*/
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_explore, container, false);
-        //movieListView = view.findViewById(R.id.listViewMovies);
-        movieGridView = view.findViewById(R.id.listViewMovies);
 
+        //Initialize all variables
+        movieGridView = view.findViewById(R.id.listViewMovies);
         exploreFragmentView = view.findViewById(R.id.linearLayoutExploreFragment);
         exploreFragmentWarning = view.findViewById(R.id.textViewExploreStatusWarning);
-
         MoviesList = new ArrayList<>();
         posterList = new ArrayList<>();
         progressBar = view.findViewById(R.id.spin_kit);
         DoubleBounce myProgressBar = new DoubleBounce();
         progressBar.setIndeterminateDrawable(myProgressBar);
 
-        //execuret network request to get the movies and their posters form internet
+        //execute network request to get the movies and their posters form internet
         IMDBAsyncTask task = new IMDBAsyncTask();
         task.execute(trendingMoviesURL);
 
         /*add action listener to grid view, on clicking the poster, new activity ExploreMovieDetails
-        will be launched to show detailsed view of movie
+        will be launched to show detailed view of movie
          */
         movieGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -108,9 +122,11 @@ public class ExploreFragment extends Fragment {
             @Override
             public void onRefresh() {
                 if (MoviesList.size() == 0) {
-                    refreshData(); // your code
+                    //if movie list is empty then call method to try download data
+                    refreshData();
                     pullToRefresh.setRefreshing(false);
                 } else {
+                    //If movies are already loaded then show the toast message
                     Toast.makeText(getActivity(), "Already Loaded with latest data",
                             Toast.LENGTH_LONG).show();
                 }
@@ -119,18 +135,23 @@ public class ExploreFragment extends Fragment {
         return view;
     }
 
+    /*Method to perform downloading of data when refresh action is triggered
+     * */
     public void refreshData() {
         IMDBAsyncTask task = new IMDBAsyncTask();
         task.execute(trendingMoviesURL);
     }
 
+    /*If fragment is resumed from a paused state call super and set the title to current "Explore"
+     * */
     public void onResume() {
         super.onResume();
         ((MainActivity) getActivity())
                 .setActionBarTitle("Explore");
     }
 
-    //check if device is connected to internet
+    /*Method to check if device is connected to internet
+     * */
     public boolean isNetworkAvailable() {
         try {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -142,9 +163,9 @@ public class ExploreFragment extends Fragment {
         }
     }
 
-    /*=============================================================
+    /*
     Show alert dialog function, to be used by function when no internet connection is found or any other errors
-    * */
+    */
     public void showAlertDialog(String TITLE, String MESSAGE) {
         new AlertDialog.Builder(getActivity())
                 .setTitle(TITLE)
@@ -154,24 +175,95 @@ public class ExploreFragment extends Fragment {
                 .show();
     }
 
-    /**
-     * ==================================================================
+    /*If result is not Error then initiate the moviePoster downloader and download movie posters on list,
+    and then call the UI update.
+    If error then show alert dialog about connection error
+    */
+    public void doActions(String result) {
+        JSONObject root = null;
+        if (result.equals("Error")) {
+            showAlertDialog("Connection Error", "No data connection found!");
+        } else {
+            //if result is not empty then try processing the JSON response and retrieve details about movies
+            try {
+                root = new JSONObject(result);
+                String totalPages = root.getString("total_pages");
+                Toast.makeText(getActivity(), totalPages,
+                        Toast.LENGTH_LONG).show();
+                JSONArray resultsArray = root.getJSONArray("results");
+                String movie_title;
+                String movie_original_title;
+                String language;
+                String overview;
+                String release_date;
+                String poster_url;
+                Bitmap movie_poster;
+                for (int i = 0; i < resultsArray.length(); i++) {
+                    JSONObject details = resultsArray.getJSONObject(i);
+                    movie_title = details.getString("title");
+                    movie_original_title = details.getString("original_title");
+                    language = details.getString("original_language");
+                    overview = details.getString("overview");
+                    release_date = details.getString("release_date");
+                    poster_url = posterHeaderURL + details.getString("poster_path");
+
+                    //Call class constructor of Movie class with necessary details and add new Movie to List
+                    MoviesList.add(new Movie(movie_title, movie_original_title, language, overview, release_date, poster_url));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        //Perform Poster Reterival from the urls received form response
+        performPosterRetrival();
+    }
+
+    /*Get all poster urls in a string of array and pass it as argument of ImageDownloader  Async Task,
+   to download the posters
+    */
+    public void performPosterRetrival() {
+        String[] posterUrls = new String[MoviesList.size()];
+        for (int i = 0; i < MoviesList.size(); i++) {
+            posterUrls[i] = (MoviesList.get(i).getPosterUrl());
+        }
+        DownloadImageFromInternet imageDownload = new DownloadImageFromInternet();
+        imageDownload.execute(posterUrls);
+
+    }
+
+    /*Set the movie poster to downloaded bitmap image, since we are showing only thumbnail
+    on ImageView it is much better to scale down resolution to save space.
+    * */
+    public void sendMoviePoster(List<Bitmap> result) {
+        for (int i = 0; i < result.size(); i++) {
+            Bitmap b = result.get(i);
+            //Trim the dimension of image to half, since we only need to show a thumbnail
+            b = Bitmap.createScaledBitmap(b, (b.getWidth() / 2), (b.getHeight() / 2), false);
+            MoviesList.get(i).setPoster(b);
+        }
+        mAdapter = new MovieAdapter(getActivity(), MoviesList);
+        movieGridView.setAdapter(mAdapter);
+
+        //hide the warning textview and progress bar and show the fragment containing movies
+        exploreFragmentWarning.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
+        exploreFragmentView.setVisibility(View.VISIBLE);
+    }
+
+    /*
      * Inherited AsyncTask to download the movie details form server and
      * pass the received string to process as a JSON response to reterive the information
      */
-
     public class IMDBAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             progressBar.setVisibility(View.VISIBLE);
-            //details.setVisibility(View.INVISIBLE);
         }
 
         /**
          * If network is available then process request otherwise return Error as result
          */
-
         @Override
         protected String doInBackground(String... strings) {
             if (isNetworkAvailable()) {
@@ -217,59 +309,6 @@ public class ExploreFragment extends Fragment {
         }
     }
 
-    /*If result is not Error then initiate the moviePoster downloader and download movie posters on list,
-    and then call the UI update.
-    If error then show alert dialog about connection error
-    * */
-    public void doActions(String result) {
-        JSONObject root = null;
-        if (result.equals("Error")) {
-            showAlertDialog("Connection Error", "No data connection found!");
-
-        } else {
-            try {
-                root = new JSONObject(result);
-                String totalPages = root.getString("total_pages");
-                Toast.makeText(getActivity(), totalPages,
-                        Toast.LENGTH_LONG).show();
-                JSONArray resultsArray = root.getJSONArray("results");
-                String movie_title;
-                String movie_original_title;
-                String language;
-                String overview;
-                String release_date;
-                String poster_url;
-                Bitmap movie_poster;
-                for (int i = 0; i < resultsArray.length(); i++) {
-                    JSONObject details = resultsArray.getJSONObject(i);
-                    movie_title = details.getString("title");
-                    movie_original_title = details.getString("original_title");
-                    language = details.getString("original_language");
-                    overview = details.getString("overview");
-                    release_date = details.getString("release_date");
-                    poster_url = posterHeaderURL + details.getString("poster_path");
-                    MoviesList.add(new Movie(movie_title, movie_original_title, language, overview, release_date, poster_url));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        performPosterRetrival();
-    }
-
-    /*Get all poster urls in a string of array and pass it as argument of ImageDownloader  Async Task,
-   to download the posters
-    * */
-    public void performPosterRetrival() {
-        String[] posterUrls = new String[MoviesList.size()];
-        for (int i = 0; i < MoviesList.size(); i++) {
-            posterUrls[i] = (MoviesList.get(i).getPosterUrl());
-        }
-        DownloadImageFromInternet imageDownload = new DownloadImageFromInternet();
-        imageDownload.execute(posterUrls);
-
-    }
-
     /*===============================================================================
     Async Task to download the posters form array of urls, passed as string array.
     * */
@@ -292,26 +331,9 @@ public class ExploreFragment extends Fragment {
             return bitmaps;
         }
 
+        //call sendMoviePoster to finally load the posters and show the results
         protected void onPostExecute(List<Bitmap> result) {
             sendMoviePoster(result);
         }
-    }
-
-    /*Set the movie poster to downloaded bitmap image, since we are showing only thumbnail
-    on ImageView it is much better to scale down resolution to save space.
-    * */
-    public void sendMoviePoster(List<Bitmap> result) {
-        for (int i = 0; i < result.size(); i++) {
-            Bitmap b = result.get(i);
-            b = Bitmap.createScaledBitmap(b, (b.getWidth() / 2), (b.getHeight() / 2), false);
-            MoviesList.get(i).setPoster(b);
-        }
-        mAdapter = new MovieAdapter(getActivity(), MoviesList);
-        movieGridView.setAdapter(mAdapter);
-
-        //hide the warning textview and progress bar and show the fragment containing movies
-        exploreFragmentWarning.setVisibility(View.GONE);
-        progressBar.setVisibility(View.GONE);
-        exploreFragmentView.setVisibility(View.VISIBLE);
     }
 }

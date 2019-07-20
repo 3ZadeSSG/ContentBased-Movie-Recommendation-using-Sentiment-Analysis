@@ -2,6 +2,8 @@ package com.example.majorproject;
 
 import android.graphics.Bitmap;
 
+/*Class to hold details about the movie, with method to retrieve each attribute of movie
+ * */
 public class Movie {
     String movie_title;
     String movie_original_title;
@@ -18,11 +20,6 @@ public class Movie {
         this.overview = overview;
         this.release_date = release_date;
         this.poster_url = poster_url;
-        //this.movie_poster=movie_poster;
-    }
-
-    public void setPoster(Bitmap movie_poster) {
-        this.movie_poster = movie_poster;
     }
 
     public String getTitle() {
@@ -53,4 +50,7 @@ public class Movie {
         return movie_poster;
     }
 
+    public void setPoster(Bitmap movie_poster) {
+        this.movie_poster = movie_poster;
+    }
 }

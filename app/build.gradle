@@ -39,7 +39,8 @@ dependencies {
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
 
     //From firebase
-    implementation 'com.google.firebase:firebase-core:16.0.9'
+    //implementation 'com.google.firebase:firebase-core:16.0.9'
+    implementation 'com.google.firebase:firebase-core:17.0.0'
     implementation 'com.google.firebase:firebase-auth:18.0.0'
 }
 apply plugin: 'com.google.gms.google-services'

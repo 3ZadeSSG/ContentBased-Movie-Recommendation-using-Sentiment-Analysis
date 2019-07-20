@@ -16,9 +16,9 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_gravity="center"
-            android:textSize="24sp"
             android:layout_margin="16dp"
-            android:hint="Enter review" />
+            android:hint="Enter review"
+            android:textSize="24sp" />
 
         <Button
             android:id="@+id/buttonSentimentQuery"
@@ -38,9 +38,9 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:layout_gravity="center"
-        android:visibility="invisible"
         android:elevation="16dp"
         android:outlineAmbientShadowColor="@color/Black"
         android:outlineSpotShadowColor="@color/Black"
+        android:visibility="invisible"
         app:SpinKit_Color="@color/PrimaryPurple" />
 </RelativeLayout>

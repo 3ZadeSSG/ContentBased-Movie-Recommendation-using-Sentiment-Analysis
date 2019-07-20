@@ -36,24 +36,28 @@ import java.nio.charset.Charset;
 
 import javax.net.ssl.HttpsURLConnection;
 
+/*Fragment for search the movie details screen
+ * */
 public class MovieRatingSearchFragment extends Fragment implements View.OnClickListener {
+    //All Layout and value container variables
     Bitmap moviePoster;
     Button buttonMovieSearch;
-    String APIKEY = "815fe2a8";
+    String APIKEY = "815fe2a8"; //API KEY Generated from OMDBAPI Website
     String address = "https://www.omdbapi.com/?apikey=" + APIKEY + "&t=";
-    String movieName = "Avengers+Endgame";
+    String movieName = "";
     ProgressBar progressBar;
     LinearLayout details;
     String movieRating;
     String movieTitle;
     EditText inputBox;
-    String posterUrl = "https://m.media-amazon.com/images/M/MV5BMTc5MDE2ODcwNV5BMl5BanBnXkFtZTgwMzI2NzQ2NzM@._V1_SX300.jpg";
+    String posterUrl = "";
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_movie_rating_search, container, false);
 
+        //Initialize all variables with view ids from layout file
         details = view.findViewById(R.id.details);
         progressBar = view.findViewById(R.id.spin_kit);
         DoubleBounce myProgressBar = new DoubleBounce();
@@ -64,11 +68,15 @@ public class MovieRatingSearchFragment extends Fragment implements View.OnClickL
         return view;
     }
 
+    /*If fragment is resumed from a paused state call super and set the title to current "Search movie rating"
+     * */
     public void onResume() {
         super.onResume();
         ((MainActivity) getActivity())
                 .setActionBarTitle("Search Movie Rating");
     }
+
+    /*Show alert dialog function, to be used by function when no internet connection is found or any other errors*/
 
     public void showAlertDialog(String TITLE, String MESSAGE) {
         new AlertDialog.Builder(getActivity())
@@ -79,11 +87,13 @@ public class MovieRatingSearchFragment extends Fragment implements View.OnClickL
                 .show();
     }
 
+    //Method to call poster downloaded AsyncTask
     public void startMoviePosterDownloader() {
         DownloadImageFromInternet imageDownload = new DownloadImageFromInternet();
         imageDownload.execute(posterUrl);
     }
 
+    /*Call necessary functions for each view clicked on screen*/
     @Override
     public void onClick(View view) {
         if (view == buttonMovieSearch) {
@@ -101,6 +111,7 @@ public class MovieRatingSearchFragment extends Fragment implements View.OnClickL
         }
     }
 
+    /*Method to check if network connection is available*/
     public boolean isNetworkAvailable() {
         try {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -109,10 +120,53 @@ public class MovieRatingSearchFragment extends Fragment implements View.OnClickL
 
         } catch (NullPointerException e) {
             return false;
-
         }
     }
 
+    /* Processing result to get necessary details form JSON response*/
+    public void doActions(String result) {
+        JSONObject root = null;
+        if (result.equals("Error")) {
+            showAlertDialog("Connection Error", "No data connection found!");
+            progressBar.setVisibility(View.INVISIBLE);
+            details.setVisibility(View.VISIBLE);
+        } else {
+            try {
+                root = new JSONObject(result);
+                if (root.getString("Response").equals("True")) {
+                    movieTitle = root.getString("Title");
+                    posterUrl = root.getString("Poster");
+                    JSONArray ratingsArray = root.getJSONArray("Ratings");
+                    JSONObject ratings = ratingsArray.getJSONObject(0);
+                    movieRating = ratings.getString("Value");
+                    posterUrl = root.getString("Poster");
+                    startMoviePosterDownloader();
+                } else {
+                    showAlertDialog("Error", root.getString("Error"));
+                    progressBar.setVisibility(View.INVISIBLE);
+                    details.setVisibility(View.VISIBLE);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /*Method to call Details Activity to show details about searched movie*/
+    public void sendMoviePoster(Bitmap result) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        result.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        Intent viewPoster = new Intent(getActivity(), MovieDetailsActivity.class);
+        viewPoster.putExtra("moviePoster", byteArray);
+        viewPoster.putExtra("movieRating", movieRating);
+        viewPoster.putExtra("movieTitle", movieTitle);
+        progressBar.setVisibility(View.INVISIBLE);
+        details.setVisibility(View.VISIBLE);
+        startActivity(viewPoster);
+    }
+
+    /*Inherited AsyncTask to perform background network request*/
     public class IMDBAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
@@ -127,7 +181,6 @@ public class MovieRatingSearchFragment extends Fragment implements View.OnClickL
                 String res = "str";
                 try {
                     URL url = new URL(strings[0]);
-                    Log.v("IMDB URL:", "\n\t\t\t====================" + strings[0]);
                     InputStream inputStream;
                     HttpsURLConnection requestConnection = (HttpsURLConnection) url.openConnection();
                     requestConnection.setReadTimeout(200000);
@@ -139,7 +192,6 @@ public class MovieRatingSearchFragment extends Fragment implements View.OnClickL
                     requestConnection.disconnect();
                     return res;
                 } catch (Exception e) {
-                    Log.v("Stack Track SSSS:", "\n\t\t\t====================" + e.getStackTrace());
                     e.printStackTrace();
                 }
             }
@@ -166,37 +218,8 @@ public class MovieRatingSearchFragment extends Fragment implements View.OnClickL
         }
     }
 
-    public void doActions(String result) {
-        JSONObject root = null;
-        if (result.equals("Error")) {
-            showAlertDialog("Connection Error", "No data connection found!");
-            progressBar.setVisibility(View.INVISIBLE);
-            details.setVisibility(View.VISIBLE);
-        } else {
-            try {
-                root = new JSONObject(result);
-                if (root.getString("Response").equals("True")) {
-                    movieTitle = root.getString("Title");
-                    posterUrl = root.getString("Poster");
-                    JSONArray ratingsArray = root.getJSONArray("Ratings");
-                    JSONObject ratings = ratingsArray.getJSONObject(0);
-                    movieRating = ratings.getString("Value");
-                    posterUrl = root.getString("Poster");
-                    Log.v("Poster URL:", "\n\t\t\t====================" + posterUrl);
-                    startMoviePosterDownloader();
-                } else {
-                    showAlertDialog("Error", root.getString("Error"));
-                    progressBar.setVisibility(View.INVISIBLE);
-                    details.setVisibility(View.VISIBLE);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     /*
-     * Movie poster downloader activity
+     * Movie poster downloader AsyncTask to perform request in background
      */
     private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
         protected Bitmap doInBackground(String... urls) {
@@ -216,18 +239,5 @@ public class MovieRatingSearchFragment extends Fragment implements View.OnClickL
         protected void onPostExecute(Bitmap result) {
             sendMoviePoster(result);
         }
-    }
-
-    public void sendMoviePoster(Bitmap result) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        result.compress(Bitmap.CompressFormat.PNG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-        Intent viewPoster = new Intent(getActivity(), MovieDetailsActivity.class);
-        viewPoster.putExtra("moviePoster", byteArray);
-        viewPoster.putExtra("movieRating", movieRating);
-        viewPoster.putExtra("movieTitle", movieTitle);
-        progressBar.setVisibility(View.INVISIBLE);
-        details.setVisibility(View.VISIBLE);
-        startActivity(viewPoster);
     }
 }

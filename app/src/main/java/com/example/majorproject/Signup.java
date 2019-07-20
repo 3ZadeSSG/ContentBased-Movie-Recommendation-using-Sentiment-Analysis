@@ -6,26 +6,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class Signup extends AppCompatActivity implements View.OnClickListener {
+    //Layout holders
     EditText editTextEmail;
     EditText editTextPassword;
     Button buttonSignup;
     Button buttonLogin;
-    FirebaseAuth firebaseAuth;
-    ProgressBar progressBar;
     LinearLayout details;
+
+    //Firebase object to perform the registration
+    FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +44,7 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
         buttonSignup.setOnClickListener(this);
         buttonLogin.setOnClickListener(this);
 
+        //if user is already logged in then start main activity screen and kill this present activity
         if (firebaseAuth.getCurrentUser() != null) {
             showToast("User is already logged in");
             finish();
@@ -51,15 +52,10 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
             startActivity(mainActivity);
         }
 
-        progressBar = findViewById(R.id.spin_kit);
-        DoubleBounce myProgressBar = new DoubleBounce();
-        progressBar.setIndeterminateDrawable(myProgressBar);
     }
 
+    /*Method to register user using Firebase authentication using email address and password*/
     void registerUser() {
-        progressBar.setVisibility(View.VISIBLE);
-        details.setVisibility(View.INVISIBLE);
-
         String email = editTextEmail.getText().toString();
         String password = editTextPassword.getText().toString();
         if (email.equals("") || password.equals("")) {
@@ -75,26 +71,28 @@ public class Signup extends AppCompatActivity implements View.OnClickListener {
                                 Intent mainActivity = new Intent(Signup.this, MainActivity.class);
                                 startActivity(mainActivity);
                             } else {
+                                //if registration failed then show error
                                 showToast("Registration Failed");
                             }
                         }
                     });
         }
-        progressBar.setVisibility(View.INVISIBLE);
-        details.setVisibility(View.VISIBLE);
     }
 
+    /*Perform necessary actions based on views clicked on screen*/
     @Override
     public void onClick(View view) {
         if (view == buttonSignup) {
             registerUser();
         }
+        //if login button is pressed then call the login activity and kill current activity
         if (view == buttonLogin) {
             Intent loginActivity = new Intent(Signup.this, Login.class);
             startActivity(loginActivity);
         }
     }
 
+    /*Method to show short time toast messages*/
     public void showToast(String toastMessage) {
         Toast.makeText(Signup.this, toastMessage,
                 Toast.LENGTH_LONG).show();

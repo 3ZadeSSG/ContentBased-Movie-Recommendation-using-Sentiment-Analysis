@@ -1,49 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
     tools:context=".Signup">
 
-    <com.github.ybq.android.spinkit.SpinKitView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/spin_kit"
-        style="@style/SpinKitView.Large.Circle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:visibility="invisible"
-        android:elevation="16dp"
-        android:outlineAmbientShadowColor="@color/Black"
-        android:outlineSpotShadowColor="@color/Black"
-        app:SpinKit_Color="@color/PrimaryPurple" />
-
     <LinearLayout
+        android:id="@+id/details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:id="@+id/details">
+        android:orientation="vertical">
 
         <EditText
+            android:id="@+id/editTextSignUpEmail"
+            style="@style/textBoxStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/textBoxStyle"
-            android:textSize="24sp"
+            android:layout_margin="16dp"
             android:hint="Enter the email ID"
-            android:layout_margin="16dp"
-            android:id="@+id/editTextSignUpEmail" />
+            android:textSize="24sp" />
 
         <EditText
+            android:id="@+id/editTextSignUpPassword"
+            style="@style/textBoxStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            style="@style/textBoxStyle"
             android:layout_margin="16dp"
-            android:textSize="24sp"
             android:hint="Enter the password"
             android:password="true"
-            android:id="@+id/editTextSignUpPassword" />
+            android:textSize="24sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -52,22 +38,22 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/buttonSignUp"
+                style="@style/buttonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/buttonSignUp"
-                android:text="Register"
-                android:layout_weight="1"
                 android:layout_margin="8dp"
-                style="@style/buttonStyle" />
+                android:layout_weight="1"
+                android:text="Register" />
 
             <Button
+                android:id="@+id/buttonStartLoginScreen"
+                style="@style/buttonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/buttonStartLoginScreen"
-                android:text="Already registered? Login Here"
-                android:layout_weight="1"
                 android:layout_margin="8dp"
-                style="@style/buttonStyle" />
+                android:layout_weight="1"
+                android:text="Already registered? Login Here" />
         </LinearLayout>
 
     </LinearLayout>

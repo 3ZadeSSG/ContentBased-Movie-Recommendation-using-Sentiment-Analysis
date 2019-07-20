@@ -30,7 +30,7 @@ import java.net.URLEncoder;
 import java.nio.charset.Charset;
 
 import javax.net.ssl.HttpsURLConnection;
-
+/*Activity similar to Explore Movie details, except it shows details of movie with rating */
 
 public class MovieDetailsActivity extends AppCompatActivity implements View.OnClickListener {
     Bitmap moviePoster;
@@ -53,7 +53,7 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
         likeURL = "https://major-project-final-246818.appspot.com/addLike/";
-        dislikeURL = "https://major-project-final-246818.appspot.com/addLike/";
+        dislikeURL = "https://major-project-final-246818.appspot.com/addDislike/";
         buttonLaunchGoogle = findViewById(R.id.buttonLaunchInternet);
         buttonLike = findViewById(R.id.buttonLike);
         buttonDislike = findViewById(R.id.buttonDislike);
@@ -128,11 +128,16 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
         }
         if (view == buttonLike) {
             flag = true;
+            buttonLike.setBackground(getResources().getDrawable(R.drawable.ic_button_like_red));
+            buttonDislike.setBackground(getResources().getDrawable(R.drawable.ic_dislike));
             MovieDetailsActivity.LikeDislikeAsyncTask task = new MovieDetailsActivity.LikeDislikeAsyncTask();
             task.execute(likeURL);
+
         }
         if (view == buttonDislike) {
             flag = false;
+            buttonLike.setBackground(getResources().getDrawable(R.drawable.ic_like));
+            buttonDislike.setBackground(getResources().getDrawable(R.drawable.ic_button_dislike_red));
             MovieDetailsActivity.LikeDislikeAsyncTask task = new MovieDetailsActivity.LikeDislikeAsyncTask();
             task.execute(dislikeURL);
         }
@@ -160,6 +165,23 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
         } catch (NullPointerException e) {
             return false;
         }
+    }
+
+    public void doActions(String result) {
+        if (result.equals("Error")) {
+            showToast("Server communication failure, please try again later");
+        } else {
+            if (flag == true) {
+                showToast("Added to likes");
+            } else {
+                showToast("Added to dislikes");
+            }
+        }
+    }
+
+    public void showToast(String toastMessage) {
+        Toast.makeText(MovieDetailsActivity.this, toastMessage,
+                Toast.LENGTH_LONG).show();
     }
 
     public class LikeDislikeAsyncTask extends AsyncTask<String, Void, String> {
@@ -214,22 +236,5 @@ public class MovieDetailsActivity extends AppCompatActivity implements View.OnCl
             }
             return output.toString();
         }
-    }
-
-    public void doActions(String result) {
-        if (result.equals("Error")) {
-            showToast("Server communication failure, please try again later");
-        } else {
-            if (flag == true) {
-                showToast("Added to likes");
-            } else {
-                showToast("Added to dislikes");
-            }
-        }
-    }
-
-    public void showToast(String toastMessage) {
-        Toast.makeText(MovieDetailsActivity.this, toastMessage,
-                Toast.LENGTH_LONG).show();
     }
 }

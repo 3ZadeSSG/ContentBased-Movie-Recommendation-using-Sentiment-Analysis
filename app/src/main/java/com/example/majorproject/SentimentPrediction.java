@@ -10,23 +10,30 @@ import androidx.appcompat.app.AppCompatActivity;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+/*Sentiment Prediction activity to call the Server on typed text*/
 public class SentimentPrediction extends AppCompatActivity {
     String sentiment_response;
     TextView result;
     CircleDisplay cd;
     float score;
 
+    /*By default method called by Android when new view gets created*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sentiment_prediction);
         cd = findViewById(R.id.circleDisplay);
         Intent i = getIntent();
+
+        //Parse the response received from the parent activity(Sentiment Prediction Fragment)
         sentiment_response = i.getStringExtra("response");
         result = findViewById(R.id.textViewResult);
+
+        //call method to show result
         showResult();
     }
 
+    /*Show the prediction result with a Circular animation on a scale of 1-100*/
     void showResult() {
         try {
             JSONObject root = new JSONObject(sentiment_response);

@@ -51,14 +51,18 @@ public class SentimentPredictionFragment extends Fragment implements View.OnClic
         return view;
     }
 
+    /*If fragment is resumed from a paused state call super and set the title to current "Sentiment Prediction"
+     */
     public void onResume() {
         super.onResume();
         ((MainActivity) getActivity())
                 .setActionBarTitle("Sentiment Prediction");
     }
 
+
     @Override
     public void onClick(View view) {
+        //if query button is touched then call the API function to perform the request
         if (view == buttonSumbitQueryText) {
             String[] input = inputBox.getText().toString().split(" ");
             String review = "";
@@ -66,7 +70,8 @@ public class SentimentPredictionFragment extends Fragment implements View.OnClic
                 review += input[i] + "+";
             }
             review += input[input.length - 1];
-            //address = "https://sentiment-android.herokuapp.com/multi/";
+
+            //append the query string at the end of address
             address = "https://major-project-final-246818.appspot.com/sentiment/";
 
             SentimentAsyncTask task = new SentimentAsyncTask();
@@ -76,6 +81,7 @@ public class SentimentPredictionFragment extends Fragment implements View.OnClic
         }
     }
 
+    /*Function to check if network is available*/
     public boolean isNetworkAvailable() {
         try {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -88,8 +94,10 @@ public class SentimentPredictionFragment extends Fragment implements View.OnClic
         }
     }
 
+
     public void doActions(String result) {
         if (!result.equals("Error")) {
+            //if there was no error then call the result activity to show prediction result
             try {
                 Intent resultActivity = new Intent(getActivity(), SentimentPrediction.class);
                 resultActivity.putExtra("response", result);
@@ -98,12 +106,14 @@ public class SentimentPredictionFragment extends Fragment implements View.OnClic
                 e.printStackTrace();
             }
         } else {
+            //Else show the server error on alert dialog
             showAlertDialog("Error", "Server Error!");
             progressBar.setVisibility(View.INVISIBLE);
             details.setVisibility(View.VISIBLE);
         }
     }
 
+    /*Function to show the alert dialog, to be used for showing error or warnings*/
     public void showAlertDialog(String TITLE, String MESSAGE) {
         new AlertDialog.Builder(getActivity())
                 .setTitle(TITLE)
@@ -113,6 +123,7 @@ public class SentimentPredictionFragment extends Fragment implements View.OnClic
                 .show();
     }
 
+    /*Inherited from AsyncTask to perform background network request without affecting main OS thread*/
     public class SentimentAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
@@ -133,10 +144,8 @@ public class SentimentPredictionFragment extends Fragment implements View.OnClic
                     requestConnection.setConnectTimeout(100000);
                     requestConnection.setRequestMethod("GET");
                     requestConnection.connect();
-                    //if (requestConnection.getResponseCode() == 200) {
                     inputStream = requestConnection.getInputStream();
                     res = readFromStream(inputStream);
-                    //}
                     requestConnection.disconnect();
                     Log.v("Result:", "\n\t\t\t====================" + res);
                     return res;

@@ -9,11 +9,11 @@
 
     <TextView
         android:id="@+id/movieTitleTextView"
+        style="@style/textBoxStyle"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:textSize="24sp"
-        style="@style/textBoxStyle"
-        android:layout_margin="16dp" />
+        android:layout_margin="16dp"
+        android:textSize="24sp" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="wrap_content"
@@ -36,60 +36,60 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
+        android:gravity="center"
+        android:orientation="horizontal">
 
         <Button
+            android:id="@+id/buttonLike"
             android:layout_width="53dp"
             android:layout_height="53dp"
-            android:id="@+id/buttonLike"
-            android:padding="8dp"
             android:layout_margin="16dp"
-            android:background="@drawable/ic_like" />
+            android:background="@drawable/ic_like"
+            android:padding="8dp" />
 
         <Button
+            android:id="@+id/buttonDislike"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:padding="2dp"
             android:layout_margin="16dp"
-            android:id="@+id/buttonDislike"
-            android:background="@drawable/ic_dislike" />
+            android:background="@drawable/ic_dislike"
+            android:padding="2dp" />
 
         <Button
+            android:id="@+id/buttonLaunchInternet"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
-            android:text="Find out more"
-            android:padding="8dp"
-            android:layout_margin="16dp"
-            android:gravity="center"
             android:layout_gravity="center"
+            android:layout_margin="16dp"
             android:background="@drawable/ripple_button"
-            android:id="@+id/buttonLaunchInternet" />
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="Find out more" />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
-        android:layout_gravity="center">
+        android:layout_gravity="center"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/textViewMovieRating"
+            style="@style/textBoxStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_margin="16dp"
-            android:textSize="24sp"
-            style="@style/textBoxStyle"
             android:padding="16dp"
-            android:layout_gravity="center" />
+            android:textSize="24sp" />
 
         <com.example.majorproject.CircleDisplay
             android:id="@+id/circleDisplay"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="16dp"
-            android:outlineSpotShadowColor="@color/Black"
-            android:outlineAmbientShadowColor="@color/Black" />
+            android:outlineAmbientShadowColor="@color/Black"
+            android:outlineSpotShadowColor="@color/Black" />
 
     </LinearLayout>
 

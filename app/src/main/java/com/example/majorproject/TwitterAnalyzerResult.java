@@ -2,7 +2,6 @@ package com.example.majorproject;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class TwitterAnalyzerResult extends AppCompatActivity {
+    //Holders for values and layouts to view result of twitter analysis
     String twitter_analyzer_response;
     TextView result;
     CircleDisplay cd;
@@ -23,6 +23,8 @@ public class TwitterAnalyzerResult extends AppCompatActivity {
 
         cd = findViewById(R.id.circleDisplay);
         Intent i = getIntent();
+
+        //Get the result from parent activity(Twitter analyzer fragement)
         twitter_analyzer_response = i.getStringExtra("response");
         result = findViewById(R.id.textViewResultTwitterAnalyzer);
         showResult();
@@ -33,9 +35,6 @@ public class TwitterAnalyzerResult extends AppCompatActivity {
             JSONObject root = new JSONObject(twitter_analyzer_response);
             String s = null;
             s = root.getString("result ");
-            Log.v("Result SSSS:", "\n\t\t\t====================" + s);
-            //String[] temp = s.split(" ");
-            //score = Float.parseFloat(temp[0]);
             score = Float.parseFloat(s);
             String temp = "Positivity : " + s + " %";
             result.setText(temp);
@@ -49,7 +48,6 @@ public class TwitterAnalyzerResult extends AppCompatActivity {
         cd.setAnimDuration(3000);
         cd.setValueWidthPercent(55f);
         cd.setTextSize(36f);
-        //score = score * 100;
         cd.setColor(getResources().getColor(R.color.PrimaryPurple));
         cd.setDrawText(true);
         cd.setDrawInnerCircle(true);

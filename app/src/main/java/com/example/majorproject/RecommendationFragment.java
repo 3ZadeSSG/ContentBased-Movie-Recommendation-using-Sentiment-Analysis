@@ -42,12 +42,14 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class RecommendationFragment extends Fragment {
 
+    //Server API method address to get the JSON response about recommended Movies
     String recommendedMoviesURL = "https://major-project-final-246818.appspot.com/getRecommendation/";
+
+    //Holders for necessary views and userID
     String uID;
     FirebaseAuth firebaseAuth;
     ArrayList<Movie> MoviesList;
     MovieAdapter mAdapter;
-    //ListView movieListView;
     GridView movieGridView;
     ArrayList<Bitmap> posterList;
     LinearLayout recommendationFragmentView;
@@ -58,9 +60,9 @@ public class RecommendationFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_recommendation, container, false);
-        //movieListView = view.findViewById(R.id.listViewMovies);
-        movieGridView = view.findViewById(R.id.listViewRecommendedMovies);
 
+        //Initialize all variables
+        movieGridView = view.findViewById(R.id.listViewRecommendedMovies);
         recommendationFragmentView = view.findViewById(R.id.linearLayoutRecommendationFragment);
         recommendationFragmentWarning = view.findViewById(R.id.textViewExploreStatusWarning);
         firebaseAuth = FirebaseAuth.getInstance();
@@ -72,6 +74,7 @@ public class RecommendationFragment extends Fragment {
         DoubleBounce myProgressBar = new DoubleBounce();
         progressBar.setIndeterminateDrawable(myProgressBar);
 
+        recommendationFragmentWarning.setVisibility(View.GONE);
         RecommendationFragment.RecommendationAsyncTask task = new RecommendationFragment.RecommendationAsyncTask();
         task.execute(recommendedMoviesURL + uID);
 
@@ -92,18 +95,18 @@ public class RecommendationFragment extends Fragment {
                 startActivity(movieDetailScreen);
             }
         });
-
-
         return view;
     }
 
-
+    /*If fragment is resumed from a paused state call super and set the title to current "Recommended Movies"
+     * */
     public void onResume() {
         super.onResume();
         ((MainActivity) getActivity())
-                .setActionBarTitle("Explore");
+                .setActionBarTitle("Recommended Movies");
     }
 
+    /*Method to check if data connection is available*/
     public boolean isNetworkAvailable() {
         try {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -115,7 +118,7 @@ public class RecommendationFragment extends Fragment {
         }
     }
 
-    //=============================================================//
+    /*Method to show alert dialog for errors or success messages*/
     public void showAlertDialog(String TITLE, String MESSAGE) {
         new AlertDialog.Builder(getActivity())
                 .setTitle(TITLE)
@@ -125,12 +128,81 @@ public class RecommendationFragment extends Fragment {
                 .show();
     }
 
+    /*Method to perform information retrieval from JSON response*/
+    public void doActions(String result) {
+        JSONObject root = null;
+        if (result.equals("Error")) {
+            showAlertDialog("Connection Error", "No data connection found!");
+        } else {
+            try {
+                root = new JSONObject(result);
+                //If status is False then there was error on server, show the received message
+                if (root.getString("status").equals("False")) {
+                    recommendationFragmentWarning.setText(root.getString("result"));
+                    recommendationFragmentWarning.setVisibility(View.VISIBLE);
+                    recommendationFragmentWarning.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                }
+                //if no error was found then perform retrieve of movie details from JSON response
+                else {
+                    JSONArray resultsArray = root.getJSONArray("result");
+                    String movie_title;
+                    String movie_original_title;
+                    String language;
+                    String overview;
+                    String release_date;
+                    String poster_url;
+                    Bitmap movie_poster;
+                    for (int i = 0; i < resultsArray.length(); i++) {
+                        JSONObject details = resultsArray.getJSONObject(i);
+                        movie_title = details.getString("title");
+                        movie_original_title = details.getString("title");
+                        language = "English";
+                        overview = details.getString("overview");
+                        release_date = details.getString("release");
+                        poster_url = details.getString("poster");
+                        MoviesList.add(new Movie(movie_title, movie_original_title, language, overview, release_date, poster_url));
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        performPosterRetrival();
+    }
+
+
+    public void performPosterRetrival() {
+        //get all poster urls into one single list to download those in a single batch
+        if (MoviesList.size() != 0) {
+            String[] posterUrls = new String[MoviesList.size()];
+            for (int i = 0; i < MoviesList.size(); i++) {
+                posterUrls[i] = (MoviesList.get(i).getPosterUrl());
+            }
+            //After movie details have been collected, call function to download the posters
+            RecommendationFragment.DownloadImageFromInternet imageDownload = new RecommendationFragment.DownloadImageFromInternet();
+            imageDownload.execute(posterUrls);
+        }
+
+    }
+
+    public void sendMoviePoster(List<Bitmap> result) {
+        for (int i = 0; i < result.size(); i++) {
+            Bitmap b = result.get(i);
+            b = Bitmap.createScaledBitmap(b, (b.getWidth() / 3), (b.getHeight() / 3), false);
+            MoviesList.get(i).setPoster(b);
+        }
+        mAdapter = new MovieAdapter(getActivity(), MoviesList);
+        movieGridView.setAdapter(mAdapter);
+        progressBar.setVisibility(View.GONE);
+        recommendationFragmentView.setVisibility(View.VISIBLE);
+    }
+
     public class RecommendationAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
             progressBar.setVisibility(View.VISIBLE);
-            //details.setVisibility(View.INVISIBLE);
         }
 
         @Override
@@ -178,51 +250,7 @@ public class RecommendationFragment extends Fragment {
         }
     }
 
-    public void doActions(String result) {
-        JSONObject root = null;
-        if (result.equals("Error")) {
-            showAlertDialog("Connection Error", "No data connection found!");
-
-        } else {
-            try {
-                root = new JSONObject(result);
-
-                JSONArray resultsArray = root.getJSONArray("result");
-                String movie_title;
-                String movie_original_title;
-                String language;
-                String overview;
-                String release_date;
-                String poster_url;
-                Bitmap movie_poster;
-                for (int i = 0; i < resultsArray.length(); i++) {
-                    JSONObject details = resultsArray.getJSONObject(i);
-                    movie_title = details.getString("title");
-                    movie_original_title = details.getString("title");
-                    language = "English";
-                    overview = details.getString("overview");
-                    release_date = details.getString("release");
-                    poster_url = details.getString("poster");
-                    MoviesList.add(new Movie(movie_title, movie_original_title, language, overview, release_date, poster_url));
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        performPosterRetrival();
-    }
-
-    public void performPosterRetrival() {
-        String[] posterUrls = new String[MoviesList.size()];
-        for (int i = 0; i < MoviesList.size(); i++) {
-            posterUrls[i] = (MoviesList.get(i).getPosterUrl());
-        }
-        RecommendationFragment.DownloadImageFromInternet imageDownload = new RecommendationFragment.DownloadImageFromInternet();
-        imageDownload.execute(posterUrls);
-
-    }
-
-    //===============================================================================//
+    /*AsyncTask to download posters from urls passed as a list in background*/
     private class DownloadImageFromInternet extends AsyncTask<String, Void, List<Bitmap>> {
         protected List<Bitmap> doInBackground(String... urls) {
             List<Bitmap> bitmaps = new ArrayList<Bitmap>();
@@ -245,18 +273,5 @@ public class RecommendationFragment extends Fragment {
         protected void onPostExecute(List<Bitmap> result) {
             sendMoviePoster(result);
         }
-    }
-
-    public void sendMoviePoster(List<Bitmap> result) {
-        for (int i = 0; i < result.size(); i++) {
-            Bitmap b = result.get(i);
-            b = Bitmap.createScaledBitmap(b, (b.getWidth() / 3), (b.getHeight() / 3), false);
-            MoviesList.get(i).setPoster(b);
-        }
-        mAdapter = new MovieAdapter(getActivity(), MoviesList);
-        movieGridView.setAdapter(mAdapter);
-        recommendationFragmentWarning.setVisibility(View.GONE);
-        progressBar.setVisibility(View.GONE);
-        recommendationFragmentView.setVisibility(View.VISIBLE);
     }
 }

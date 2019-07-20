@@ -7,19 +7,19 @@
     tools:context=".TwitterAnalyzerResult">
 
     <TextView
+        android:id="@+id/textViewResultTwitterAnalyzer"
+        style="@style/textBoxStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="26dp"
-        android:textSize="24sp"
         android:layout_gravity="center"
-        android:id="@+id/textViewResultTwitterAnalyzer"
-        style="@style/textBoxStyle" />
+        android:layout_margin="26dp"
+        android:textSize="24sp" />
 
     <com.example.majorproject.CircleDisplay
         android:id="@+id/circleDisplay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="36dp"
-        android:outlineSpotShadowColor="@color/Black"
-        android:outlineAmbientShadowColor="@color/Black" />
+        android:outlineAmbientShadowColor="@color/Black"
+        android:outlineSpotShadowColor="@color/Black" />
 </LinearLayout>

@@ -14,10 +14,11 @@
         android:roundIcon="@mipmap/ic_logo_university"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".TwitterAnalyzerResult"></activity>
+        <activity android:name=".TwitterAnalyzerResult"
+            android:label="Twitter Analyzer Result"></activity>
         <activity
             android:name=".ExploreMovieDetails"
-            android:label="Details"
+            android:label="Movie Details"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SentimentPrediction"
@@ -45,6 +46,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
     </application>
 
 </manifest>

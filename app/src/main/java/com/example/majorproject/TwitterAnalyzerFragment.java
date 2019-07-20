@@ -6,7 +6,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,13 +51,15 @@ public class TwitterAnalyzerFragment extends Fragment implements View.OnClickLis
         return view;
     }
 
+    /*If fragment is resumed from a paused state call super and set the title to current "Twitter Analyzer"
+     */
     public void onResume() {
         super.onResume();
         ((MainActivity) getActivity())
-                .setActionBarTitle("Sentiment Prediction");
+                .setActionBarTitle("Twitter Analyzer");
     }
 
-
+    /*For each click on views, call the necessary functions*/
     @Override
     public void onClick(View view) {
         if (view == buttonTwitterQuery) {
@@ -68,7 +69,10 @@ public class TwitterAnalyzerFragment extends Fragment implements View.OnClickLis
                 query += input[i] + "+";
             }
             query += input[input.length - 1];
+            // API address + SearchString is final API function call address
             address = "https://major-project-final-246818.appspot.com/analyze/";
+
+            //Call background thread to analyze thread
             TwitterAnalyzerFragment.TwitterAsyncTask task = new TwitterAnalyzerFragment.TwitterAsyncTask();
             String url = address;
             url = url + query;
@@ -76,7 +80,7 @@ public class TwitterAnalyzerFragment extends Fragment implements View.OnClickLis
         }
     }
 
-    //===============================================================//
+    /*Method to check if network is available*/
     public boolean isNetworkAvailable() {
         try {
             ConnectivityManager mConnectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -89,6 +93,7 @@ public class TwitterAnalyzerFragment extends Fragment implements View.OnClickLis
         }
     }
 
+    /*Perform retrieve of score from result if there is any else show error*/
     public void doActions(String result) {
         if (!result.equals("Error")) {
             try {
@@ -100,11 +105,13 @@ public class TwitterAnalyzerFragment extends Fragment implements View.OnClickLis
             }
         } else {
             showAlertDialog("Error", "Server Error!");
+            //hide progress bar and show the fragment again
             progressBar.setVisibility(View.INVISIBLE);
             details.setVisibility(View.VISIBLE);
         }
     }
 
+    /*Alert dialog to show the warning, errors and warning messages*/
     public void showAlertDialog(String TITLE, String MESSAGE) {
         new AlertDialog.Builder(getActivity())
                 .setTitle(TITLE)
@@ -114,6 +121,7 @@ public class TwitterAnalyzerFragment extends Fragment implements View.OnClickLis
                 .show();
     }
 
+    /*Inherited AsyncTask class to peform network request in background without affecting OS thread*/
     public class TwitterAsyncTask extends AsyncTask<String, Void, String> {
         @Override
         protected void onPreExecute() {
@@ -130,6 +138,7 @@ public class TwitterAnalyzerFragment extends Fragment implements View.OnClickLis
                     URL url = new URL(strings[0]);
                     InputStream inputStream;
                     HttpsURLConnection requestConnection = (HttpsURLConnection) url.openConnection();
+                    //set timeouts for maximum wait before thread disconnects form server
                     requestConnection.setReadTimeout(2000000);
                     requestConnection.setConnectTimeout(1000000);
                     requestConnection.setRequestMethod("GET");
@@ -137,7 +146,6 @@ public class TwitterAnalyzerFragment extends Fragment implements View.OnClickLis
                     inputStream = requestConnection.getInputStream();
                     res = readFromStream(inputStream);
                     requestConnection.disconnect();
-                    Log.v("Result:", "\n\t\t\t====================" + res);
                     return res;
                 } catch (Exception e) {
                     e.printStackTrace();

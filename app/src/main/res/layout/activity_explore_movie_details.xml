@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:orientation="vertical">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -38,82 +38,82 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_weight="1">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp"
-                    android:layout_weight="1"
-                    android:textSize="16sp"
-                    android:padding="8dp"
+                    android:id="@+id/textViewMovieTitle"
                     style="@style/textBoxStyle"
-                    android:id="@+id/textViewMovieTitle" />
-
-                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
                     android:layout_weight="1"
                     android:padding="8dp"
-                    android:textSize="16sp"
-                    style="@style/textBoxStyle"
-                    android:id="@+id/textViewMovieOriginalTitle" />
+                    android:textSize="16sp" />
 
                 <TextView
+                    android:id="@+id/textViewMovieOriginalTitle"
+                    style="@style/textBoxStyle"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"
-                    android:padding="8dp"
                     android:layout_weight="1"
-                    android:textSize="16sp"
+                    android:padding="8dp"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/textViewReleaseDate"
                     style="@style/textBoxStyle"
-                    android:id="@+id/textViewReleaseDate" />
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:padding="8dp"
+                    android:textSize="16sp" />
             </LinearLayout>
         </LinearLayout>
 
         <TextView
+            android:id="@+id/textViewOverview"
+            style="@style/textBoxStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:id="@+id/textViewOverview"
             android:layout_margin="8dp"
             android:padding="8dp"
-            style="@style/textBoxStyle" />
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <Button
+                android:id="@+id/buttonLike"
                 android:layout_width="53dp"
                 android:layout_height="53dp"
-                android:id="@+id/buttonLike"
-                android:padding="8dp"
                 android:layout_margin="16dp"
-                android:background="@drawable/ic_like" />
+                android:background="@drawable/ic_like"
+                android:padding="8dp" />
 
             <Button
+                android:id="@+id/buttonDislike"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:padding="2dp"
                 android:layout_margin="16dp"
-                android:id="@+id/buttonDislike"
-                android:background="@drawable/ic_dislike" />
+                android:background="@drawable/ic_dislike"
+                android:padding="2dp" />
 
             <Button
+                android:id="@+id/buttonLaunchInternet"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:text="Find out more"
-                android:padding="8dp"
-                android:layout_margin="16dp"
-                android:gravity="center"
                 android:layout_gravity="center"
+                android:layout_margin="16dp"
                 android:background="@drawable/ripple_button"
-                android:id="@+id/buttonLaunchInternet" />
+                android:gravity="center"
+                android:padding="8dp"
+                android:text="Find out more" />
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
