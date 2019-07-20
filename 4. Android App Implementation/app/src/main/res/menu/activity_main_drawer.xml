@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_sentiment_prediction"
+            android:icon="@drawable/ic_sentiment"
+            android:title="Predict Sentiment" />
+        <item
+            android:id="@+id/nav_movie_rating_search"
+            android:icon="@drawable/ic_search"
+            android:title="Search Movie Rating" />
+        <item
+            android:id="@+id/nav_twitter_analyzer"
+            android:icon="@drawable/ic_twitter"
+            android:title="Analyzer Twitter Sentiment" />
+        <item
+            android:id="@+id/nav_explore"
+            android:icon="@drawable/ic_explore"
+            android:title="Explore Content" />
+        <item
+            android:id="@+id/nav_recommendation"
+            android:icon="@drawable/ic_recommendation"
+            android:title="Recommended Movies" />
+    </group>
+
+    <item android:title="User Profile Commands">
+        <menu>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@drawable/ic_logout"
+                android:title="Logout" />
+            <item
+                android:id="@+id/nav_exit"
+                android:icon="@drawable/ic_exit"
+                android:title="Exit" />
+        </menu>
+    </item>
+</menu>

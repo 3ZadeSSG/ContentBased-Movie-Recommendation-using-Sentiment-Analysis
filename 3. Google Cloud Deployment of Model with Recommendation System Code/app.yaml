@@ -1,0 +1,27 @@
+#the app runtime will be on python
+runtime: python
+
+#App Engine flexible environment automatically scales your app up and down while balancing the load. 
+env: flex
+
+#timeout is 120 seconds, "-t 120" is not mentioned it will be by default of 30 secs
+entrypoint: gunicorn -t 120 -b :$PORT main:app
+
+runtime_config: 
+  python_version: 3
+
+manual_scaling:
+  instances: 1
+
+# 4 cpu cores with 20 gb ram
+# for a single core max ram can be 6.5 GB, hence for 4 cores 4x6.5 is max
+resources:
+  cpu: 4
+  memory_gb: 20
+  disk_size_gb: 20
+  
+handlers:
+- url: /.*
+  script: auto
+
+  

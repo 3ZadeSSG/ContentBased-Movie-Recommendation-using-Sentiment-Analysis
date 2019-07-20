@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.majorproject">
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:hardwareAccelerated="true"
+        android:icon="@mipmap/ic_logo_university"
+        android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@mipmap/ic_logo_university"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity android:name=".TwitterAnalyzerResult"
+            android:label="Twitter Analyzer Result"></activity>
+        <activity
+            android:name=".ExploreMovieDetails"
+            android:label="Movie Details"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".SentimentPrediction"
+            android:label="@string/sentiment_activity_result"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".MovieDetailsActivity"
+            android:label="@string/movie_rating_result"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".Login"
+            android:label="Login Screen" />
+        <activity
+            android:name=".Signup"
+            android:label="Registration Screen" />
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppThemeNavigation">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+    </application>
+
+</manifest>

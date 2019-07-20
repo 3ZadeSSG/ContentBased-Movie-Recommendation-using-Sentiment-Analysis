@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+
+    <color name="themeBlack">#757575</color>
+    <color name="boxBlack">#424242</color>
+    <color name="TextWhite">#FFFFFF</color>
+    <color name='PrimaryPurple'>#6200EE</color>
+    <color name='PurpleMiddle'>#3700B3</color>
+    <color name="Black">#000000</color>
+    <color name="LightPurple">#9575CD</color>
+
+
+    <color name="DarkStatusBar">#000000</color>
+    <color name="DarkAppBar">#212121</color>
+    <color name="DarkBackground">#303030</color>
+    <color name="DarkGrey">#424242</color>
+    <color name="DarkPrimaryText">#FFFFFFFF</color>
+    <color name="DarkSecondaryText">#B3FFFFFF</color>
+    <color name="DarkHintText">#80FFFFFF</color>
+    <color name="DarkDividers">#1FFFFFFF</color>
+</resources>
