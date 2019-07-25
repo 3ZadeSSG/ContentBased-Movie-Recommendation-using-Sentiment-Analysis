@@ -44,7 +44,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class ExploreFragment extends Fragment {
 
     //Your APIKEY to peform request
-    String APIKEY=""
+    String APIKEY="";
 
     //API address to get trending movies
     String trendingMoviesURL = "https://api.themoviedb.org/3/movie/popular?api_key=APIKEY&language=en-US&page=1";

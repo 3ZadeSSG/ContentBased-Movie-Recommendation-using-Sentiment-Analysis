@@ -66,6 +66,7 @@ public class ExploreMovieDetails extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_explore_movie_details);
 
         //Server API address for Like/Dislike Action
+        // When you create your own app engine then this will be different
         likeURL = "https://major-project-final-246818.appspot.com/addLike/";
         dislikeURL = "https://major-project-final-246818.appspot.com/addDislike/";
 
