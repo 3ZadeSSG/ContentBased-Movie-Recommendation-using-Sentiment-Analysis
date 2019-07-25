@@ -72,7 +72,25 @@ An example of output when deploying the app in my case:
  
 
 # Video Walkthrough
-User Logs in and Like a Movie which gets saved in user like database|User gets recommended movieon recommendation page| Twitter Analyzer to demonstrate that it can be used to create the rating database
+User Logs In and likes a movie which gets saved in database|User gets recommended movie on recommendations page| Twitter Analyzer to demonstrate that it can be used to create the rating database
 :-------------------------:|:-------------------------:|:-------------------------:
 <img src= "https://raw.githubusercontent.com/3ZadeSSG/ContentBased-Movie-Recommendation-using-Sentiment-Analysis/master/5. Screenshots/Login.gif" width="250">|<img src= "https://raw.githubusercontent.com/3ZadeSSG/ContentBased-Movie-Recommendation-using-Sentiment-Analysis/master/5. Screenshots/Recommendation.gif" width="250">|<img src= "https://raw.githubusercontent.com/3ZadeSSG/ContentBased-Movie-Recommendation-using-Sentiment-Analysis/master/5. Screenshots/Twitter Analyzer.gif" width="250">
+
+
+# Additional Screenshots
+Liking a movie|Disliking a movie| Navigation Drawer
+:-------------------------:|:-------------------------:|:-------------------------:
+<img src= "https://raw.githubusercontent.com/3ZadeSSG/ContentBased-Movie-Recommendation-using-Sentiment-Analysis/master/5. Screenshots/Screenshot Like.png" width="250">|<img src= "https://raw.githubusercontent.com/3ZadeSSG/ContentBased-Movie-Recommendation-using-Sentiment-Analysis/master/5. Screenshots/Screenshot Dislike.png" width="250">|<img src= "https://raw.githubusercontent.com/3ZadeSSG/ContentBased-Movie-Recommendation-using-Sentiment-Analysis/master/5. Screenshots/Screenshot Nav Window.png" width="250">
+
+
+
+# Upgrades
+
+  * Calculating cosine similarity matrix each time is expensive, it can be done once, and each row can be saved individually so that it can be reloaded by movie index.
+  
+  * Twitter Analyzer will give more accurate result if number of tweets to be analyzed is more, since data clearning and dropping duplicates will eventually reduce the number of analyzed tweets from 300(selected window size for this system) to 50-150
+  
+  * As user base grows system can migrate to a Hybrid Recommendation+Sentiment Analysis System as proposed in this research paper (https://arxiv.org/pdf/1811.10804.pdf)
+  
+  * To avoid loading same posters each time user gets recommendation on movie, the poster thumbnails can be saved locally.
 
