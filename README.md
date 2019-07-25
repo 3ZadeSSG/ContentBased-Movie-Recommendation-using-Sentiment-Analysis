@@ -27,7 +27,7 @@ App to recommend movies beased on user likes, show twitter sentiment based on se
    
               
 
-# Purposed Model
+# Proposed Model
 Creating the rating database is possible on production environment, but the twitter analyzer model have been implemented to be used there. The purposed model has been shown in following figure.
 
    _**1. Based on user likes, generate list of recommended movies using traditional content based filtering method.**_
@@ -45,6 +45,31 @@ Creating the rating database is possible on production environment, but the twit
 
 # Final System
 <img src= "https://raw.githubusercontent.com/3ZadeSSG/ContentBased-Movie-Recommendation-using-Sentiment-Analysis/master/5. Screenshots/Compute Engine.png">
+
+# Google Cloud App Engine Deployment
+
+Client can use the API methods to call the server to get respone, the API methods are defined in Folder __3. Google Cloud Deployment__ inside __main.py__ file. To deploy the model, paste your sentiment analysis checkpoint file into the Folder __3.Google Cloud Deployment__ and run the following command form termial:
+  
+    > gcloud app deploy
+
+An example of output when deploying the app in my case:
+          
+          F:\MajorProject\3. Google Cloud Deployment of Model with Recommendation System Code>gcloud app deploy
+    Services to deploy:
+
+    descriptor:      [F:\MajorProject\3. Google Cloud Deployment of Model with Recommendation System Code\app.yaml]
+    source:          [F:\MajorProject\3. Google Cloud Deployment of Model with Recommendation System Code]
+    target project:  [major-project-final-246818]
+    target service:  [default]
+    target version:  [20190724t221233]
+    target url:      [https://major-project-final-246818.appspot.com]
+
+
+    Do you want to continue (Y/n)?
+    
+ After your own app has been deployed you need to replace the API Urls from Android Java files with your own API urls. Which means __"https://major-project-final-246818.appspot.com"__ with your own generated url.
+ 
+ 
 
 # Video Walkthrough
 User Logs in and Like a Movie which gets saved in user like database|User gets recommended movieon recommendation page| Twitter Analyzer to demonstrate that it can be used to create the rating database
