@@ -1,3 +1,5 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/3ZadeSSG/ContentBased-Movie-Recommendation-using-Sentiment-Analysis/blob/master/LICENSE)
+
 # ContentBased-Movie-Recommendation-using-Sentiment-Analysis
 App to recommend movies beased on user likes, show twitter sentiment based on search string, show sentiment prediction of a sentence
 
