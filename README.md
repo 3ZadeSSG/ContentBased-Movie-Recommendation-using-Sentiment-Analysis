@@ -1,7 +1,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/3ZadeSSG/ContentBased-Movie-Recommendation-using-Sentiment-Analysis/blob/master/LICENSE)
 
 # ContentBased-Movie-Recommendation-using-Sentiment-Analysis
-App to recommend movies beased on user likes, show twitter sentiment based on search string, show sentiment prediction of a sentence
+This repo contains a Hybrid Recommender System developed in PyTorch. The App is used to recommend movies beased on user likes, show twitter sentiment based on search string (to cross check sentiment analysis resutls on trends), show sentiment prediction of a sentence
 
 # Quick Setup Guide
 
